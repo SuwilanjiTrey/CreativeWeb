@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ARGUS/static/css/main.c049cb9d.css",
+    "main.js": "/ARGUS/static/js/main.6fbc994b.js",
+    "static/js/453.81aca4c1.chunk.js": "/ARGUS/static/js/453.81aca4c1.chunk.js",
+    "index.html": "/ARGUS/index.html",
+    "main.c049cb9d.css.map": "/ARGUS/static/css/main.c049cb9d.css.map",
+    "main.6fbc994b.js.map": "/ARGUS/static/js/main.6fbc994b.js.map",
+    "453.81aca4c1.chunk.js.map": "/ARGUS/static/js/453.81aca4c1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c049cb9d.css",
+    "static/js/main.6fbc994b.js"
+  ]
+}
