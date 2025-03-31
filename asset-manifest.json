@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/ARGUS/static/css/main.c049cb9d.css",
-    "main.js": "/ARGUS/static/js/main.6fbc994b.js",
-    "static/js/453.81aca4c1.chunk.js": "/ARGUS/static/js/453.81aca4c1.chunk.js",
-    "index.html": "/ARGUS/index.html",
-    "main.c049cb9d.css.map": "/ARGUS/static/css/main.c049cb9d.css.map",
-    "main.6fbc994b.js.map": "/ARGUS/static/js/main.6fbc994b.js.map",
-    "453.81aca4c1.chunk.js.map": "/ARGUS/static/js/453.81aca4c1.chunk.js.map"
+    "main.css": "/static/css/main.a12465c1.css",
+    "main.js": "/static/js/main.d6fff30e.js",
+    "static/js/453.81aca4c1.chunk.js": "/static/js/453.81aca4c1.chunk.js",
+    "static/media/soccer.jpg": "/static/media/soccer.915dcf6c9781338fdf4f.jpg",
+    "index.html": "/index.html",
+    "main.a12465c1.css.map": "/static/css/main.a12465c1.css.map",
+    "main.d6fff30e.js.map": "/static/js/main.d6fff30e.js.map",
+    "453.81aca4c1.chunk.js.map": "/static/js/453.81aca4c1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c049cb9d.css",
-    "static/js/main.6fbc994b.js"
+    "static/css/main.a12465c1.css",
+    "static/js/main.d6fff30e.js"
   ]
 }
