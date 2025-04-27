@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom'; //use hashrouter for single page applications
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // Import the components we've created
@@ -14,15 +14,13 @@ import StartupWebsite from './Components/LandingPages/startup.jsx';
 import PortfolioWebsite from './Components/LandingPages/portfolio.jsx';
 import ContactPage from './Components/Contact.jsx';
 
-
-
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter basename="/">
       <div className="App">
         <Routes>
-	<Route path="/" element={<LandingPageCatalog />} />
-          <Route path="/home" element={<LandingPageCatalog />} />
+          <Route path="/" element={<LandingPageCatalog />} />
+	  <Route path="/ARGUS" element={<LandingPageCatalog />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/catalog" element={<LandingPageCatalog />} />
           <Route path="/templates/:templateId" element={<TemplateDetail />} />
@@ -35,7 +33,7 @@ function App() {
 	<Route path="/Contact-me" element= {<ContactPage />} />
         </Routes>
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
