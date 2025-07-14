@@ -22,7 +22,7 @@ const LandingPageCatalog = () => {
       description: "Bespoke websites tailored to your unique business needs with cutting-edge technologies.",
       features: ["React & Next.js", "Full-stack Solutions", "API Integration", "Performance Optimization"],
       gradient: "from-blue-500 to-cyan-500",
-      link: "/services/web-development"
+      link: "/services"
     },
     {
       icon: <Palette className="w-12 h-12 text-purple-600" />,
@@ -30,7 +30,7 @@ const LandingPageCatalog = () => {
       description: "Intuitive and stunning user interfaces that captivate your audience and drive engagement.",
       features: ["User Research", "Wireframing", "Prototyping", "Design Systems"],
       gradient: "from-purple-500 to-pink-500",
-      link: "/services/ui-ux-design"
+      link: "/services"
     },
     {
       icon: <Layers className="w-12 h-12 text-green-600" />,
@@ -38,7 +38,7 @@ const LandingPageCatalog = () => {
       description: "Seamless experiences across all devices and screen sizes with modern responsive techniques.",
       features: ["Mobile-First", "Cross-Browser", "Touch Optimized", "Accessibility"],
       gradient: "from-green-500 to-teal-500",
-      link: "/services/responsive-design"
+      link: "/services"
     }
   ];
 
