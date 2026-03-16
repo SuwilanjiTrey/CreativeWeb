@@ -44,19 +44,19 @@ const LandingPageCatalog = () => {
 
   const portfolioItems = [
     { 
-      image: "/CreativeWeb/template/ecommerce.jpg", 
+      image: "/template/ecommerce.jpg", 
       title: "E-commerce Platform",
       tech: "React, Node.js, Stripe",
       description: "Modern e-commerce solution with seamless checkout"
     },
     { 
-      image: "/CreativeWeb/template/startup.jpg", 
+      image: "/template/startup.jpg", 
       title: "Corporate Website",
       tech: "Next.js, Tailwind CSS",
       description: "Professional corporate presence with dynamic content"
     },
     { 
-      image: "/CreativeWeb/template/realestate.jpg", 
+      image: "/template/realestate.jpg", 
       title: "Real Estate Landing Page",
       tech: "React, Framer Motion",
       description: "Interactive property showcase with smooth animations"
@@ -456,4 +456,5 @@ const LandingPageCatalog = () => {
   );
 };
 
-export default LandingPageCatalog;
+export default LandingPageCatalog;
+

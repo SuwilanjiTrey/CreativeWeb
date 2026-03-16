@@ -15,7 +15,7 @@ const SoccerClubWebsite = () => {
       position: 'Forward',
       number: 7,
       stats: { goals: 934, assists: 257, rating: 9.1 },
-      image: '/CreativeWeb/RONALDO-1.png'
+      image: '/RONALDO-1.png'
     },
     { 
       id: 2, 
@@ -23,7 +23,7 @@ const SoccerClubWebsite = () => {
       position: 'Midfielder',
       number: 11,
       stats: { goals: 28, assists: 18, rating: 8.7 },
-      image: '/CreativeWeb/MOH-SALLAH.png'
+      image: '/MOH-SALLAH.png'
     },
     { 
       id: 3, 
@@ -31,7 +31,7 @@ const SoccerClubWebsite = () => {
       position: 'Forward',
       number: 9,
       stats: { goals: 84, assists: 16, rating: 8.5 },
-      image: '/CreativeWeb/HAALAND-1.png'
+      image: '/HAALAND-1.png'
     }
   ];
   
@@ -42,21 +42,21 @@ const SoccerClubWebsite = () => {
       title: 'FC Glory Wins Championship Final',
       date: 'March 3, 2025',
       preview: 'A stunning victory in the final minute secures the trophy for our team.',
-      image: '/CreativeWeb/victory.jpg'
+      image: '/victory.jpg'
     },
     {
       id: 2,
       title: 'New Stadium Construction Begins',
       date: 'February 20, 2025',
       preview: 'The club begins work on our state-of-the-art 65,000 seat stadium.',
-      image: '/CreativeWeb/newstadium.jpg'
+      image: '/newstadium.jpg'
     },
     {
       id: 3,
       title: 'Youth Academy Product Signs Professional Contract',
       date: 'February 10, 2025',
       preview: '17-year-old prodigy joins the first team after impressive development.',
-      image: '/CreativeWeb/deal2.jpg'
+      image: '/deal2.jpg'
     }
   ];
   

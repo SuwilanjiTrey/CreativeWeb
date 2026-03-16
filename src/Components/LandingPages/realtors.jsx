@@ -17,7 +17,7 @@ const LuxuryRealEstate = () => {
       sqft: 3850,
       location: "Miami Beach, FL",
       imageIndex: 1,
-      image: '/CreativeWeb/houses/1.jpeg'
+      image: '/houses/1.jpeg'
     },
     {
       id: 2,
@@ -28,7 +28,7 @@ const LuxuryRealEstate = () => {
       sqft: 3200,
       location: "Downtown, NY",
       imageIndex: 2,
-      image: '/CreativeWeb/houses/2.jpeg'
+      image: '/houses/2.jpeg'
     },
     {
       id: 3,
@@ -39,7 +39,7 @@ const LuxuryRealEstate = () => {
       sqft: 5500,
       location: "Aspen, CO",
       imageIndex: 3,
-      image: '/CreativeWeb/houses/3.jpeg'
+      image: '/houses/3.jpeg'
     }
     ,
     {
@@ -51,7 +51,7 @@ const LuxuryRealEstate = () => {
       sqft: 5500,
       location: "Aspen, CO",
       imageIndex: 3,
-      image: '/CreativeWeb/houses/4.jpeg'
+      image: '/houses/4.jpeg'
     }
   ];
 
@@ -124,7 +124,7 @@ const LuxuryRealEstate = () => {
         <div className="absolute inset-0 bg-black/60 z-10"></div>
         <div 
           className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-          style={{ backgroundImage: `url('/CreativeWeb/houses/bg.jpeg')` }}
+          style={{ backgroundImage: `url('/houses/bg.jpeg')` }}
         ></div>
         
         <div className="container mx-auto px-4 z-20 text-center">

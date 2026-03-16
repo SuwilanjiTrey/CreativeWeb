@@ -21,37 +21,37 @@ const ServicesPage = () => {
       id: 'agency-template',
       name: 'Agency Landing Page',
       description: 'Modern, sleek design for digital agencies',
-      thumbnail: '/CreativeWeb/template/Agency.jpg', 
+      thumbnail: '/template/Agency.jpg', 
     },
     {
       id: 'real-estate-template',
       name: 'real estate website',
       description: 'Clean, minimalist real estate agencies',
-      thumbnail: '/CreativeWeb/houses/4.jpeg', 
+      thumbnail: '/houses/4.jpeg', 
     },
     {
       id: 'portfolio-template',
       name: 'Personal Portfolio',
       description: 'Clean, minimalist portfolio showcase',
-      thumbnail: '/CreativeWeb/template/portfolio.jpg', 
+      thumbnail: '/template/portfolio.jpg', 
     },
     {
       id: 'ecommerce-template',
       name: 'E-commerce Store',
       description: 'Responsive online store template',
-      thumbnail: '/CreativeWeb/template/ecommerce.jpg', // Replace with your actual image path
+      thumbnail: '/template/ecommerce.jpg', // Replace with your actual image path
     },
     {
       id: 'startup-template',
       name: 'Startup Landing Page',
       description: 'Vibrant design for tech startups',
-      thumbnail: '/CreativeWeb/template/startup.jpg', // Replace with your actual image path
+      thumbnail: '/template/startup.jpg', // Replace with your actual image path
     },
     {
       id: 'soccer-template',
       name: 'soccer-template',
       description: 'Responsive soccer management template',
-      thumbnail: '/CreativeWeb/template/soccersite.jpg', // Replace with your actual image path
+      thumbnail: '/template/soccersite.jpg', // Replace with your actual image path
     }
   ];
 
@@ -61,25 +61,25 @@ const ServicesPage = () => {
       id: 'corporate-identity',
       name: 'Corporate Identity',
       description: 'Professional branding for established businesses',
-      thumbnail: '/CreativeWeb/logos/2.png', // Replace with your actual image path
+      thumbnail: '/logos/2.png', // Replace with your actual image path
     },
     {
       id: 'startup-branding',
       name: 'Startup Branding',
       description: 'Modern branding for new businesses',
-      thumbnail: '/CreativeWeb/logos/13.png', // Replace with your actual image path
+      thumbnail: '/logos/13.png', // Replace with your actual image path
     },
     {
       id: 'minimalist-logo',
       name: 'Minimalist Logo',
       description: 'Clean, simple logo designs',
-      thumbnail: '/CreativeWeb/logos/4.png', // Replace with your actual image path
+      thumbnail: '/logos/4.png', // Replace with your actual image path
     },
     {
       id: 'brand-guidelines',
       name: 'Brand Guidelines',
       description: 'Comprehensive brand style guides',
-      thumbnail: '/CreativeWeb/logos/14.png', // Replace with your actual image path
+      thumbnail: '/logos/14.png', // Replace with your actual image path
     }
   ];
 
@@ -89,25 +89,25 @@ const ServicesPage = () => {
       id: 'email-automation',
       name: 'Email Automation',
       description: 'Automated email marketing solutions',
-      thumbnail: '/CreativeWeb/gmail.jpg', // Replace with your actual image path
+      thumbnail: '/gmail.jpg', // Replace with your actual image path
     },
     {
       id: 'crm-integration',
       name: 'CRM Integration',
       description: 'Customer relationship management solutions',
-      thumbnail: '/CreativeWeb/crm.jpg', // Replace with your actual image path
+      thumbnail: '/crm.jpg', // Replace with your actual image path
     },
     {
       id: 'api-development',
       name: 'API Development',
       description: 'Custom API solutions for business needs',
-      thumbnail: '/CreativeWeb/api.jpg', // Replace with your actual image path
+      thumbnail: '/api.jpg', // Replace with your actual image path
     },
     {
       id: 'cloud-database',
       name: 'Cloud Database',
       description: 'Scalable cloud database implementations',
-      thumbnail: '/CreativeWeb/cloud.jpg', // Replace with your actual image path
+      thumbnail: '/cloud.jpg', // Replace with your actual image path
     }
   ];
 

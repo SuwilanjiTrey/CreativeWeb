@@ -11,13 +11,14 @@ const AnimatedEcommerceWebsite = () => {
 
   // Mock product data
   const products = [
-    { id: 1, name: "Premium Headphones", price: "$249.99", category: "Electronics", image: "/CreativeWeb/ecommerce/headsets.jpeg", rating: 4.8 },
-    { id: 2, name: "Smart Watch", price: "$199.99", category: "Electronics", image: "/CreativeWeb/ecommerce/watch.jpeg", rating: 4.7 },
-    { id: 3, name: "Designer Handbag", price: "$399.99", category: "Fashion", image: "/CreativeWeb/ecommerce/handbag.jpeg", rating: 4.9 },
-    { id: 4, name: "Running Shoes", price: "$129.99", category: "Sports", image: "/CreativeWeb/ecommerce/shoes.jpeg", rating: 4.6 },
-    { id: 5, name: "Wireless Earbuds", price: "$149.99", category: "Electronics", image: "/CreativeWeb/ecommerce/airpods.jpeg", rating: 4.5 },
-    { id: 6, name: "Coffee Maker", price: "$89.99", category: "Home", image: "/CreativeWeb/ecommerce/coffee.jpeg", rating: 4.4 },
+    { id: 1, name: "Premium Headphones", price: "$249.99", category: "Electronics", image: "/ecommerce/headsets.jpeg", rating: 4.8 },
+    { id: 2, name: "Smart Watch", price: "$199.99", category: "Electronics", image: "/ecommerce/watch.jpeg", rating: 4.7 },
+    { id: 3, name: "Designer Handbag", price: "$399.99", category: "Fashion", image: "/ecommerce/handbag.jpeg", rating: 4.9 },
+    { id: 4, name: "Running Shoes", price: "$129.99", category: "Sports", image: "/ecommerce/shoes.jpeg", rating: 4.6 },
+    { id: 5, name: "Wireless Earbuds", price: "$149.99", category: "Electronics", image: "/ecommerce/airpods.jpeg", rating: 4.5 },
+    { id: 6, name: "Coffee Maker", price: "$89.99", category: "Home", image: "/ecommerce/coffee.jpeg", rating: 4.4 },
   ];
+
 
   // Load products with animation delay
   useEffect(() => {
@@ -76,6 +77,10 @@ const AnimatedEcommerceWebsite = () => {
       }
     })
   };
+  
+  const heroProduct = products[Math.floor(Math.random() * products.length)];
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -236,11 +241,12 @@ const AnimatedEcommerceWebsite = () => {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="relative z-10"
             >
-              <img 
-                src={products.image}
-                alt="Featured Product" 
-                className="rounded-lg shadow-2xl" 
-              />
+			  <img 
+				  src={heroProduct.image}
+				  alt={heroProduct.name}
+				  className="rounded-lg shadow-2xl"
+				/>
+
               <motion.div
                 initial={{ x: "100%", opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -524,4 +530,4 @@ const AnimatedEcommerceWebsite = () => {
   );
 };
 
-export default AnimatedEcommerceWebsite;
+export default AnimatedEcommerceWebsite;

@@ -5,7 +5,7 @@ const templates = {
   'agency-template': {
     name: 'Agency Landing Page',
     description: 'Modern, sleek design for digital agencies',
-    fullImage: '/CreativeWeb/template/Agency.jpg',
+    fullImage: '/template/Agency.jpg',
     features: [
       'Responsive Design',
       'Dark/Light Mode',
@@ -17,7 +17,7 @@ const templates = {
 'real-estate-template': {
     name: 'Real Estate Landing Page',
     description: 'Modern, sleek design for real estate agencies',
-    fullImage: '/CreativeWeb/houses/4.jpeg',
+    fullImage: '/houses/4.jpeg',
     features: [
       'Responsive Design',
       'Dark/Light Mode',
@@ -29,7 +29,7 @@ const templates = {
 'soccer-template': {
     name: 'Football manager/Fan Page',
     description: 'Modern, sleek design for soccer agencies',
-    fullImage: '/CreativeWeb/template/soccersite.jpg',
+    fullImage: '/template/soccersite.jpg',
     features: [
       'Responsive Design',
       'Dark/Light Mode',
@@ -41,7 +41,7 @@ const templates = {
 'ecommerce-template': {
     name: 'E-Commerce Page',
     description: 'Modern, sleek design for ecommerce platforms',
-    fullImage: '/CreativeWeb/template/ecommerce.jpg',
+    fullImage: '/template/ecommerce.jpg',
     features: [
       'Responsive Design',
       'Dark/Light Mode',
@@ -53,7 +53,7 @@ const templates = {
 'startup-template': {
     name: 'Startup Landing Page',
     description: 'Modern, sleek design for startup agencies',
-    fullImage: '/CreativeWeb/template/startup.jpg',
+    fullImage: '/template/startup.jpg',
     features: [
       'Responsive Design',
       'Dark/Light Mode',
@@ -65,7 +65,7 @@ const templates = {
 'portfolio-template': {
     name: 'Portfolio Landing Page',
     description: 'Modern, sleek design for portfolio websites',
-    fullImage: '/CreativeWeb/template/portfolio.jpg',
+    fullImage: '/template/portfolio.jpg',
     features: [
       'Responsive Design',
       'Dark/Light Mode',
