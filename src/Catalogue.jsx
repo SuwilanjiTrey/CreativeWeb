@@ -1,460 +1,552 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, Layers, Send, Star, Code, Palette, ArrowRight, Sparkles, Zap, Globe } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight, ArrowUpRight, Code, Palette, Layers, Sparkles, ExternalLink, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import BottomTabBar from './Components/shared/BottomTabBar.jsx';
 
-const LandingPageCatalog = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [isVisible, setIsVisible] = useState({});
+/* ─── Neon Polygons ─── */
+const NeonPolygons = () => (
+  <div aria-hidden="true" style={{ position:'fixed',inset:0,zIndex:0,pointerEvents:'none',overflow:'hidden' }}>
+    <svg width="100%" height="100%" style={{ position:'absolute',inset:0 }}>
+      <defs>
+        <filter id="gpv"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="gpc"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="gpa"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <polygon points="60,15 110,15 135,57 110,99 60,99 35,57" fill="none" stroke="#6D28D9" strokeWidth="1.5" strokeOpacity="0.45" filter="url(#gpv)" style={{animation:'cFloatA 14s ease-in-out infinite'}}/>
+      <polygon points="74,30 96,30 107,49 96,68 74,68 63,49" fill="none" stroke="#8B5CF6" strokeWidth="0.7" strokeOpacity="0.28" style={{animation:'cFloatA 14s ease-in-out infinite'}}/>
+      <polygon points="87%,2% 94%,16% 80%,16%" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeOpacity="0.55" filter="url(#gpc)" style={{animation:'cFloatB 11s ease-in-out infinite'}}/>
+      <polygon points="94%,37% 97%,43% 94%,49% 91%,43%" fill="none" stroke="#06B6D4" strokeWidth="1.1" strokeOpacity="0.42" filter="url(#gpc)" style={{animation:'cFloatC 9s ease-in-out infinite'}}/>
+      <polygon points="82%,74% 87%,71% 92%,75% 92%,82% 87%,86% 82%,86% 77%,82% 77%,75%" fill="none" stroke="#6D28D9" strokeWidth="1.5" strokeOpacity="0.35" filter="url(#gpv)" style={{animation:'cFloatD 16s ease-in-out infinite'}}/>
+      <polygon points="4%,80% 9%,71% 15%,80%" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeOpacity="0.48" filter="url(#gpa)" style={{animation:'cFloatB 12s ease-in-out infinite reverse'}}/>
+      <polygon points="3%,44% 7%,41% 11%,44% 9%,49% 5%,49%" fill="none" stroke="#8B5CF6" strokeWidth="1.1" strokeOpacity="0.35" style={{animation:'cFloatC 10s ease-in-out infinite reverse'}}/>
+      <polygon points="70%,10% 72%,12% 70%,14% 68%,12%" fill="#06B6D4" fillOpacity="0.38" style={{animation:'cFloatD 8s ease-in-out infinite'}}/>
+      <polygon points="23%,26% 25%,28% 23%,30% 21%,28%" fill="#8B5CF6" fillOpacity="0.32" style={{animation:'cFloatB 7s ease-in-out infinite reverse'}}/>
+      <polygon points="58%,87% 60%,89% 58%,91% 56%,89%" fill="#F59E0B" fillOpacity="0.38" style={{animation:'cFloatC 9s ease-in-out infinite'}}/>
+      <polygon points="40%,4% 60%,4% 50%,20%" fill="none" stroke="#6D28D9" strokeWidth="0.7" strokeOpacity="0.15" style={{animation:'cFloatA 20s ease-in-out infinite'}}/>
+    </svg>
+  </div>
+);
+
+/* ─── All work batches — 3 items per batch for the grid ─── */
+/* Layout key per batch: slot sizes = [tall, half, half] then [half, half, wide] etc.
+   We rotate through 3-item "screens" every 5s */
+const ALL_ITEMS = [
+  // ── Batch A ──
+  [
+    { type:'template', id:'agency-template',      label:'Agency Landing',   sub:'Web Design',   thumb:'/template/Agency.jpg',       demo:'#/testing',    accent:'#6D28D9', span:'tall' },
+    { type:'template', id:'ecommerce-template',   label:'E-commerce Store', sub:'Web Design',   thumb:'/template/ecommerce.jpg',    demo:'#/e-commerce', accent:'#06B6D4', span:'half' },
+    { type:'template', id:'startup-template',     label:'Startup Landing',  sub:'SaaS',         thumb:'/template/startup.jpg',      demo:'#/startup',    accent:'#8B5CF6', span:'half' },
+  ],
+  // ── Batch B ──
+  [
+    { type:'template', id:'real-estate-template', label:'Real Estate',      sub:'Web Design',   thumb:'/houses/4.jpeg',             demo:'#/realtor',    accent:'#F59E0B', span:'tall' },
+    { type:'logo',     id:'corporate-identity',   label:'Corporate ID',     sub:'Branding',     thumb:'/logos/2.png',               demo:null,           accent:'#6D28D9', span:'half' },
+    { type:'logo',     id:'startup-branding',     label:'Startup Brand',    sub:'Branding',     thumb:'/logos/13.png',              demo:null,           accent:'#8B5CF6', span:'half' },
+  ],
+  // ── Batch C ──
+  [
+    { type:'template', id:'portfolio-template',   label:'Portfolio',        sub:'Web Design',   thumb:'/template/portfolio.jpg',    demo:'#/portfolio',  accent:'#8B5CF6', span:'tall' },
+    { type:'logo',     id:'minimalist-logo',      label:'Minimalist Logo',  sub:'Branding',     thumb:'/logos/4.png',               demo:null,           accent:'#F59E0B', span:'half' },
+    { type:'template', id:'soccer-template',      label:'Soccer Club',      sub:'Sports',       thumb:'/template/soccersite.jpg',   demo:'#/soccer',     accent:'#06B6D4', span:'half' },
+  ],
+  // ── Batch D ──
+  [
+    { type:'logo',     id:'brand-guidelines',     label:'Brand Guidelines', sub:'Branding',     thumb:'/logos/14.png',              demo:null,           accent:'#F59E0B', span:'half' },
+    { type:'template', id:'ecommerce-template',   label:'E-commerce',       sub:'Web Design',   thumb:'/template/ecommerce.jpg',    demo:'#/e-commerce', accent:'#06B6D4', span:'half' },
+    { type:'template', id:'agency-template',      label:'Agency + Branding','sub':'Full package',thumb:'/template/Agency.jpg',     demo:'#/testing',    accent:'#6D28D9', span:'wide' },
+  ],
+];
+
+/* ─── Animated Bento Showcase ─── */
+function BentoShowcase() {
+  const [batchIdx, setBatchIdx]   = useState(0);
+  const [visible,  setVisible]    = useState(true);   // for cross-fade
+  const INTERVAL = 5000;
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const id = setInterval(() => {
+      setVisible(false);                              // fade out
+      setTimeout(() => {
+        setBatchIdx(p => (p + 1) % ALL_ITEMS.length);
+        setVisible(true);                             // fade in next
+      }, 350);
+    }, INTERVAL);
+    return () => clearInterval(id);
   }, []);
 
-  const navigate = useNavigate();
+  const batch = ALL_ITEMS[batchIdx];
 
-  const services = [
-    {
-      icon: <Code className="w-12 h-12 text-blue-600" />,
-      title: "Custom Web Development",
-      description: "Bespoke websites tailored to your unique business needs with cutting-edge technologies.",
-      features: ["React & Next.js", "Full-stack Solutions", "API Integration", "Performance Optimization"],
-      gradient: "from-blue-500 to-cyan-500",
-      link: "/services"
-    },
-    {
-      icon: <Palette className="w-12 h-12 text-purple-600" />,
-      title: "UI/UX Design",
-      description: "Intuitive and stunning user interfaces that captivate your audience and drive engagement.",
-      features: ["User Research", "Wireframing", "Prototyping", "Design Systems"],
-      gradient: "from-purple-500 to-pink-500",
-      link: "/services"
-    },
-    {
-      icon: <Layers className="w-12 h-12 text-green-600" />,
-      title: "Responsive Design",
-      description: "Seamless experiences across all devices and screen sizes with modern responsive techniques.",
-      features: ["Mobile-First", "Cross-Browser", "Touch Optimized", "Accessibility"],
-      gradient: "from-green-500 to-teal-500",
-      link: "/services"
-    }
-  ];
-
-  const portfolioItems = [
-    { 
-      image: "/template/ecommerce.jpg", 
-      title: "E-commerce Platform",
-      tech: "React, Node.js, Stripe",
-      description: "Modern e-commerce solution with seamless checkout"
-    },
-    { 
-      image: "/template/startup.jpg", 
-      title: "Corporate Website",
-      tech: "Next.js, Tailwind CSS",
-      description: "Professional corporate presence with dynamic content"
-    },
-    { 
-      image: "/template/realestate.jpg", 
-      title: "Real Estate Landing Page",
-      tech: "React, Framer Motion",
-      description: "Interactive property showcase with smooth animations"
-    }
-  ];
-
-  const AnimatedCounter = ({ end, duration = 2000, suffix = "" }) => {
-    const [count, setCount] = useState(0);
-    const [hasStarted, setHasStarted] = useState(false);
-
-    useEffect(() => {
-      if (!hasStarted) return;
-      
-      const increment = end / (duration / 50);
-      const timer = setInterval(() => {
-        setCount(prev => {
-          const next = prev + increment;
-          if (next >= end) {
-            clearInterval(timer);
-            return end;
-          }
-          return next;
-        });
-      }, 50);
-
-      return () => clearInterval(timer);
-    }, [hasStarted, end, duration]);
-
-    useEffect(() => {
-      const timer = setTimeout(() => setHasStarted(true), 500);
-      return () => clearTimeout(timer);
-    }, []);
-
-    return <span>{Math.floor(count)}{suffix}</span>;
-  };
-
-  const FloatingElement = ({ children, delay = 0, className = "" }) => {
-    return (
-      <div 
-        className={`animate-float ${className}`}
-        style={{
-          animation: `float 6s ease-in-out infinite`,
-          animationDelay: `${delay}s`
-        }}
-      >
-        {children}
-      </div>
-    );
-  };
-
+  /* progress dots */
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-        @keyframes gradient-shift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-pulse-glow {
-          animation: pulse-glow 3s ease-in-out infinite;
-        }
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient-shift 8s ease infinite;
-        }
-        .glass-effect {
-          backdrop-filter: blur(10px);
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .hover-lift {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .hover-lift:hover {
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-      `}</style>
+    <div>
+      {/* dots */}
+      <div style={{ display:'flex', gap:6, marginBottom:14, justifyContent:'flex-end' }}>
+        {ALL_ITEMS.map((_, i) => (
+          <button key={i} onClick={() => { setVisible(false); setTimeout(()=>{ setBatchIdx(i); setVisible(true); },200); }}
+            aria-label={`Show batch ${i+1}`}
+            style={{ width: i===batchIdx ? 20 : 6, height:6, borderRadius:99,
+              border:'none', cursor:'pointer', padding:0, transition:'all .35s',
+              background: i===batchIdx ? '#6D28D9' : 'rgba(109,40,217,.2)' }}/>
+        ))}
+      </div>
 
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 glass-effect">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            CreativeWeb
-          </div>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8 items-center">
-            <a href="#/home" className="text-gray-700 hover:text-blue-600 transition-all duration-300 hover:scale-105">Home</a>
-            <a href="#/services" className="text-gray-700 hover:text-blue-600 transition-all duration-300 hover:scale-105">Services</a>
-            <a href="https://suwilanjitrey.github.io/" className="text-gray-700 hover:text-blue-600 transition-all duration-300 hover:scale-105">About me</a>
-            <a href="#/Contact-me" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full hover:scale-105 transition-all duration-300 animate-pulse-glow">
-              Contact Us
-            </a>
-          </div>
-          
-          {/* Mobile Menu Toggle */}
-          <div className="md:hidden">
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+      {/* grid */}
+      <div style={{
+        display:'grid',
+        gridTemplateColumns:'repeat(6,1fr)',
+        gridTemplateRows:'auto',
+        gap:10,
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(10px)',
+        transition:'opacity .35s ease, transform .35s ease',
+      }}>
+        {batch.map((item, i) => {
+          // span logic
+          const colSpan =
+            item.span === 'tall' ? '1 / 4' :
+            item.span === 'wide' ? '1 / 7' :
+            i === 1              ? '4 / 7' :
+                                   '4 / 7';   // fallback half
+
+          // row logic: tall item spans 2 rows, others fill rows
+          const rowSpan = item.span === 'tall' ? 'span 2' : 'span 1';
+
+          const isLogo = item.type === 'logo';
+          const height = item.span === 'tall' ? 300 : item.span === 'wide' ? 180 : 144;
+
+          return (
+            <div key={`${batchIdx}-${i}`}
+              style={{
+                gridColumn: colSpan,
+                gridRow: rowSpan,
+                borderRadius:16, overflow:'hidden', position:'relative',
+                height, cursor:'pointer',
+                border:'1.5px solid rgba(109,40,217,.1)',
+                background: isLogo ? '#F9F9FF' : '#1a1a2e',
+                transition:'transform .22s, box-shadow .22s',
+              }}
+              onMouseEnter={e=>{ e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow=`0 12px 32px ${item.accent}25`; }}
+              onMouseLeave={e=>{ e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=''; }}
             >
-              <Menu className="w-6 h-6 text-gray-800" />
-            </button>
-          </div>
-        </div>
-        
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden glass-effect absolute w-full shadow-lg animate-slideDown">
-            <div className="flex flex-col items-center space-y-4 py-6">
-              <a href="#/home" className="text-gray-700 hover:text-blue-600 transition-colors">Home</a>
-              <a href="#/services" className="text-gray-700 hover:text-blue-600 transition-colors">Services</a>
-              <a href="https://suwilanjitrey.github.io/" className="text-gray-700 hover:text-blue-600 transition-colors">About me</a>
-              <a href="#/Contact-me" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full">
-                Contact me
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
+              <img
+                src={item.thumb}
+                alt={item.label}
+                loading={i === 0 && batchIdx === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                style={{
+                  width:'100%', height:'100%', display:'block',
+                  objectFit: isLogo ? 'contain' : 'cover',
+                  padding: isLogo ? 20 : 0,
+                  transition:'transform .4s',
+                }}
+                onMouseEnter={e=>{ if(!isLogo) e.currentTarget.style.transform='scale(1.05)'; }}
+                onMouseLeave={e=>{ e.currentTarget.style.transform=''; }}
+              />
 
-      {/* Hero Section */}
-      <header className="relative pt-24 pb-20 px-4 min-h-screen flex items-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 animate-gradient overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <FloatingElement delay={0} className="absolute top-20 left-10 text-blue-200 opacity-20">
-            <Code className="w-20 h-20" />
-          </FloatingElement>
-          <FloatingElement delay={1} className="absolute top-40 right-20 text-purple-200 opacity-20">
-            <Palette className="w-16 h-16" />
-          </FloatingElement>
-          <FloatingElement delay={2} className="absolute bottom-40 left-20 text-green-200 opacity-20">
-            <Layers className="w-24 h-24" />
-          </FloatingElement>
-          <FloatingElement delay={0.5} className="absolute bottom-20 right-10 text-pink-200 opacity-20">
-            <Sparkles className="w-18 h-18" />
-          </FloatingElement>
-        </div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center">
-            <div className="mb-8">
-              <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 leading-tight">
-                Transforming Ideas into{' '}
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient">
-                  Digital Experiences
-                </span>
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                We craft stunning, functional websites that elevate your brand and engage your audience with cutting-edge design and technology.
-              </p>
-            </div>
-
-            {/* Stats */}
-            <div className="flex justify-center space-x-8 mb-12">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">
-                  <AnimatedCounter end={50} suffix="+" />
-                </div>
-                <div className="text-gray-600">Projects Done</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">
-                  <AnimatedCounter end={30} suffix="+" />
-                </div>
-                <div className="text-gray-600">Happy Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">
-                  <AnimatedCounter end={99} suffix="%" />
-                </div>
-                <div className="text-gray-600">Satisfaction</div>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a 
-                href="#/services" 
-                className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg hover:scale-105 transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl"
-              >
-                Get Started
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <a 
-                href="https://Suwilanjitrey.github.io" 
-                className="group text-gray-700 px-8 py-4 rounded-full text-lg hover:text-blue-600 transition-colors inline-flex items-center border-2 border-gray-300 hover:border-blue-600"
-              >
-                View Portfolio
-                <Globe className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Services Section */}
-      <section id="services" className="py-20 px-4 bg-white relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive web solutions designed to bring your vision to life
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div 
-                key={index} 
-                className="group relative bg-white p-8 rounded-2xl shadow-lg hover-lift border border-gray-100 overflow-hidden"
-              >
-                {/* Background Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-                
-                <div className="relative z-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="p-4 rounded-full bg-gradient-to-r from-gray-100 to-gray-50 group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-2xl font-semibold mb-4 text-gray-800 text-center group-hover:text-blue-600 transition-colors">
-                    {service.title}
-                  </h3>
-                  
-                  <p className="text-gray-600 mb-6 text-center leading-relaxed">
-                    {service.description}
-                  </p>
-                  
-                  <div className="space-y-2 mb-6">
-                    {service.features.map((feature, i) => (
-                      <div key={i} className="flex items-center text-sm text-gray-500">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                        {feature}
+              {/* overlay + labels — only on template cards */}
+              {!isLogo && (
+                <>
+                  <div style={{ position:'absolute',inset:0,
+                    background:'linear-gradient(to top,rgba(10,8,25,.75) 0%,rgba(10,8,25,.05) 55%,transparent 100%)' }}/>
+                  <div style={{ position:'absolute',bottom:0,left:0,right:0,padding:'12px 14px',
+                    display:'flex',alignItems:'flex-end',justifyContent:'space-between' }}>
+                    <div>
+                      <div style={{ fontSize:8,color:'rgba(255,255,255,.55)',fontWeight:700,letterSpacing:'.08em',marginBottom:2 }}>
+                        {item.sub.toUpperCase()}
                       </div>
-                    ))}
+                      <div style={{ fontSize:13,fontWeight:700,color:'#fff' }}>{item.label}</div>
+                    </div>
+                    {item.demo && (
+                      <a href={item.demo} target="_blank" rel="noopener noreferrer"
+                        onClick={e=>e.stopPropagation()}
+                        style={{ width:26,height:26,borderRadius:7,
+                          background:'rgba(255,255,255,.18)',border:'1px solid rgba(255,255,255,.3)',
+                          display:'flex',alignItems:'center',justifyContent:'center',
+                          textDecoration:'none',flexShrink:0 }}>
+                        <ExternalLink size={11} color="#fff"/>
+                      </a>
+                    )}
                   </div>
-                  
-                  <button
-                    onClick={() => navigate(service.link)}
-                    className="w-full bg-gradient-to-r from-gray-800 to-gray-900 text-white py-3 px-6 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 group-hover:scale-105 font-medium"
-                  >
-                    Learn More
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <button
-              onClick={() => navigate('/services')}
-              className="group inline-flex items-center bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg hover:scale-105 transition-all duration-300 shadow-lg"
-            >
-              View All Services
-              <Zap className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
-            </button>
-          </div>
-        </div>
-      </section>
+                </>
+              )}
 
-      {/* Portfolio Section */}
-      <section id="portfolio" className="py-20 px-4 bg-gray-900 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient"></div>
-        </div>
-        
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Our Portfolio</h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Discover the digital experiences we've crafted for our clients
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {portfolioItems.map((item, index) => (
-              <div
-                key={index}
-                className="group relative bg-gray-800 rounded-2xl overflow-hidden hover-lift border border-gray-700"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="text-xs text-blue-300 mb-1">{item.tech}</div>
+              {/* logo label */}
+              {isLogo && (
+                <div style={{ position:'absolute',bottom:0,left:0,right:0,padding:'8px 12px',
+                  background:'rgba(255,255,255,.9)',backdropFilter:'blur(6px)',
+                  borderTop:'1px solid rgba(109,40,217,.08)' }}>
+                  <div style={{ fontSize:8,color:'#9CA3AF',fontWeight:700,letterSpacing:'.07em',marginBottom:1 }}>
+                    {item.sub.toUpperCase()}
                   </div>
+                  <div style={{ fontSize:11,fontWeight:700,color:'#1F2937' }}>{item.label}</div>
                 </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4">{item.description}</p>
-                  <div className="flex items-center text-blue-400 text-sm group-hover:text-blue-300 transition-colors">
-                    <span>View Project</span>
-                    <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              )}
 
-          <div className="text-center mt-12">
-            <button
-              onClick={() => navigate('/services')}
-              className="group relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg hover:scale-105 transition-all duration-300 shadow-lg overflow-hidden"
-            >
-              <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 bg-white opacity-10 transition-all duration-1000 ease-out group-hover:-translate-x-40"></span>
-              <span className="relative flex items-center">
-                See More Projects
-                <Star className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
-              </span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-4 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 animate-gradient relative overflow-hidden">
-        <FloatingElement delay={0} className="absolute top-10 left-10 text-white opacity-10">
-          <Send className="w-16 h-16" />
-        </FloatingElement>
-        <FloatingElement delay={1} className="absolute bottom-10 right-10 text-white opacity-10">
-          <Sparkles className="w-20 h-20" />
-        </FloatingElement>
-        
-        <div className="max-w-lg mx-auto text-center relative z-10">
-          <h2 className="text-4xl font-bold mb-6 text-white">Let's Create Something Amazing</h2>
-          <p className="text-white/90 mb-8 text-lg leading-relaxed">
-            Ready to bring your digital vision to life? Let's collaborate and create something extraordinary together.
-          </p>
-          <a 
-            href="#/Contact-me" 
-            className="group inline-flex items-center bg-white text-blue-600 px-8 py-4 rounded-full text-lg hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
-          >
-            Start Your Project
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                CreativeWeb
-              </div>
-              <p className="text-gray-400">Transforming ideas into digital experiences</p>
+              {/* accent dot */}
+              <div style={{ position:'absolute',top:10,left:10,
+                width:6,height:6,borderRadius:'50%',background:item.accent,
+                boxShadow:`0 0 8px ${item.accent}` }}/>
             </div>
-            <div className="flex space-x-6">
-              <a 
-                href="https://www.linkedin.com/in/suwilanji-chellah-01a534239" 
-                className="text-gray-400 hover:text-blue-400 transition-colors"
-              >
-                LinkedIn
-              </a>
-              <a 
-                href="#/services" 
-                className="text-gray-400 hover:text-blue-400 transition-colors"
-              >
-                Services
-              </a>
-              <a 
-                href="#/Contact-me" 
-                className="text-gray-400 hover:text-blue-400 transition-colors"
-              >
-                Contact
-              </a>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2025 CreativeWeb. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+          );
+        })}
+      </div>
     </div>
   );
-};
+}
 
-export default LandingPageCatalog;
+/* ─── Animated counter ─── */
+function Counter({ end, suffix = '' }) {
+  const [val, setVal] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      let cur = 0;
+      const step = end / 40;
+      const t = setInterval(() => {
+        cur = Math.min(cur + step, end);
+        setVal(Math.floor(cur));
+        if (cur >= end) clearInterval(t);
+      }, 40);
+    }, { threshold: 0.5 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [end]);
+  return <span ref={ref}>{val}{suffix}</span>;
+}
 
+/* ─── Main component ─── */
+export default function LandingPageCatalog() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+        :root { --primary:#6D28D9; --secondary:#8B5CF6; --complement:#06B6D4; --accent:#F59E0B; --neutral:#1F2937; }
+        *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+        html { scroll-behavior:smooth; }
+        body { background:#fff; color:#1F2937; font-family:'Poppins',system-ui,sans-serif; }
+        img  { display:block; max-width:100%; }
+        .page-wrap { padding-bottom:88px; min-height:100vh; overflow-x:hidden; }
+
+        @keyframes cFloatA { 0%,100%{transform:translate(0,0) rotate(0deg)} 33%{transform:translate(8px,-14px) rotate(3deg)} 66%{transform:translate(-6px,10px) rotate(-2deg)} }
+        @keyframes cFloatB { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-10px,-18px) rotate(5deg)} }
+        @keyframes cFloatC { 0%,100%{transform:translate(0,0)} 40%{transform:translate(12px,8px)} 80%{transform:translate(-8px,-6px)} }
+        @keyframes cFloatD { 0%,100%{transform:translate(0,0) rotate(0deg)} 25%{transform:translate(6px,14px) rotate(-4deg)} 75%{transform:translate(-10px,-6px) rotate(3deg)} }
+        @keyframes fadeUp  { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+        @keyframes floatBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+        .fade-up { animation:fadeUp .6s ease both; }
+        .bob     { animation:floatBob 4s ease-in-out infinite; }
+
+        .hover-lift { transition:transform .22s,box-shadow .22s; }
+        .hover-lift:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(109,40,217,.12); }
+
+        .nav-link { color:#4B5563; text-decoration:none; font-size:13px; font-weight:600; transition:color .2s; }
+        .nav-link:hover { color:#6D28D9; }
+
+        /* Section divider */
+        .section-label {
+          font-size:10px; font-weight:700; color:#6D28D9;
+          letter-spacing:.12em; margin-bottom:10px; display:block;
+        }
+
+        /* Service cards */
+        .svc-card { background:rgba(242, 241, 240); border-radius:18px; padding:24px;
+          border:1.5px solid rgba(109,40,217,.09); transition:all .22s; }
+        .svc-card:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(109,40,217,.1); border-color:rgba(109,40,217,.22); }
+
+        /* Portfolio card */
+        .port-card { border-radius:16px; overflow:hidden; position:relative;
+          border:1.5px solid rgba(109,40,217,.1); cursor:pointer; transition:transform .25s,box-shadow .25s; }
+        .port-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(109,40,217,.14); }
+        .port-card img { width:100%; height:100%; object-fit:cover; transition:transform .4s; }
+        .port-card:hover img { transform:scale(1.05); }
+        .port-overlay { position:absolute; inset:0;
+          background:linear-gradient(to top,rgba(10,8,25,.7) 0%,transparent 60%); }
+      `}</style>
+
+      <NeonPolygons/>
+
+      {/* ── STICKY NAV ── */}
+      <nav aria-label="Site navigation" style={{
+        position:'sticky', top:0, zIndex:50,
+        background:'rgba(255,255,255,.93)', backdropFilter:'blur(18px)', WebkitBackdropFilter:'blur(18px)',
+        borderBottom:'1px solid rgba(109,40,217,.08)', padding:'0 20px',
+      }}>
+        <div style={{ maxWidth:1160, margin:'0 auto', height:56, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <a href="#/" style={{ fontSize:20, fontWeight:800, textDecoration:'none',
+            background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+            WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+            CreativeWeb
+          </a>
+          <div style={{ display:'flex', gap:22, alignItems:'center' }}>
+            <a href="#/apps" style={{ background:'linear-gradient(135deg,#6D28D9,#8B5CF6)', color:'#fff',
+              padding:'8px 20px', borderRadius:99, fontSize:12, fontWeight:700, textDecoration:'none' }}>
+              Apps
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <div className="page-wrap">
+
+        {/* ══════════════════════════════════════════
+            1. HERO — headline + rotating bento grid
+        ══════════════════════════════════════════ */}
+        <section style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'0 auto', padding:'52px 20px 20px' }}>
+
+          {/* Intro copy */}
+          <div className="fade-up" style={{ maxWidth:680, marginBottom:36 }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:7,
+              background:'rgba(109,40,217,.07)', border:'1px solid rgba(109,40,217,.18)',
+              borderRadius:99, padding:'5px 14px', marginBottom:18 }}>
+              <Sparkles size={12} color="#6D28D9"/>
+              <span style={{ fontSize:11, fontWeight:700, color:'#6D28D9', letterSpacing:'.05em' }}>
+                Available for new projects
+              </span>
+            </div>
+
+            <h1 style={{ fontSize:'clamp(2rem,5.5vw,3.6rem)', fontWeight:800, color:'#1F2937',
+              letterSpacing:'-.03em', lineHeight:1.08, marginBottom:16 }}>
+              Transforming Ideas into{' '}
+              <span style={{ background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+                WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+                Digital Experiences
+              </span>
+            </h1>
+
+            <p style={{ fontSize:'clamp(13px,2vw,16px)', color:'#6B7280', lineHeight:1.75, marginBottom:24, maxWidth:560 }}>
+              Stunning, functional websites that elevate your brand and engage your audience —
+              built with performance and accessibility at the core.
+            </p>
+
+            {/* Stats inline */}
+            <div style={{ display:'flex', gap:'clamp(18px,4vw,44px)', flexWrap:'wrap', marginBottom:28 }}>
+              {[['50+','Projects','#6D28D9'],['30+','Clients','#06B6D4'],['99%','Satisfaction','#F59E0B']].map(([n,l,c])=>(
+                <div key={l}>
+                  <div style={{ fontSize:'clamp(1.5rem,3.5vw,2.2rem)', fontWeight:800, color:c, lineHeight:1 }}>
+                    <Counter end={parseInt(n)} suffix={n.replace(/\d/g,'')}/>
+                  </div>
+                  <div style={{ fontSize:11, color:'#9CA3AF', fontWeight:500, marginTop:2 }}>{l}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+              <a href="#/services" style={{
+                display:'inline-flex', alignItems:'center', gap:8,
+                background:'linear-gradient(135deg,#6D28D9,#8B5CF6)', color:'#fff',
+                padding:'13px 26px', borderRadius:99, fontWeight:700, fontSize:14, textDecoration:'none',
+                boxShadow:'0 8px 24px rgba(109,40,217,.3)', transition:'transform .2s',
+              }}
+                onMouseEnter={e=>e.currentTarget.style.transform='scale(1.04)'}
+                onMouseLeave={e=>e.currentTarget.style.transform=''}>
+                View Services <ArrowRight size={15}/>
+              </a>
+              <a href="https://suwilanjitreychellah.vercel.app/" target="_blank" rel="noopener noreferrer" style={{
+                display:'inline-flex', alignItems:'center', gap:8,
+                border:'1.5px solid rgba(109,40,217,.25)', color:'#6D28D9',
+                padding:'12px 24px', borderRadius:99, fontWeight:700, fontSize:14, textDecoration:'none',
+                transition:'all .2s',
+              }}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(109,40,217,.05)';e.currentTarget.style.borderColor='rgba(109,40,217,.5)'}}
+                onMouseLeave={e=>{e.currentTarget.style.background='';e.currentTarget.style.borderColor='rgba(109,40,217,.25)'}}>
+                About me <ArrowUpRight size={14}/>
+              </a>
+            </div>
+          </div>
+
+          {/* ── THE ROTATING BENTO SHOWCASE ── */}
+          <div className="fade-up" style={{ animationDelay:'.18s' }}>
+            <BentoShowcase/>
+          </div>
+
+          {/* See more button */}
+          <div style={{ textAlign:'center', marginTop:28 }}>
+            <a href="#/services" style={{
+              display:'inline-flex', alignItems:'center', gap:8,
+              background:'#fff', color:'#6D28D9',
+              border:'1.5px solid rgba(109,40,217,.25)',
+              padding:'12px 28px', borderRadius:99, fontWeight:700, fontSize:13, textDecoration:'none',
+              transition:'all .2s', boxShadow:'0 4px 16px rgba(109,40,217,.08)',
+            }}
+              onMouseEnter={e=>{e.currentTarget.style.background='rgba(109,40,217,.05)';e.currentTarget.style.borderColor='#6D28D9';e.currentTarget.style.boxShadow='0 8px 24px rgba(109,40,217,.14)'}}
+              onMouseLeave={e=>{e.currentTarget.style.background='#fff';e.currentTarget.style.borderColor='rgba(109,40,217,.25)';e.currentTarget.style.boxShadow='0 4px 16px rgba(109,40,217,.08)'}}>
+              See all templates <ArrowRight size={14}/>
+            </a>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════
+            2. WHAT I BUILD — service cards
+        ══════════════════════════════════════════ */}
+        <section style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'60px auto 0', padding:'0 20px' }}>
+          <span className="section-label">WHAT I BUILD</span>
+          <h2 style={{ fontSize:'clamp(1.4rem,3.5vw,2.2rem)', fontWeight:800, color:'#1F2937',
+            letterSpacing:'-.025em', marginBottom:28 }}>
+            Full-stack digital solutions
+          </h2>
+
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))', gap:16 }}>
+            {[
+              { icon:Code,    color:'#6D28D9', light:'rgba(109,40,217,.08)', title:'Web Development',
+                desc:'React, Next.js, and full-stack builds. Fast, accessible, SEO-optimised.',
+                tags:['React / Next.js','Full-stack','API Integration','SEO'] },
+              { icon:Palette, color:'#F59E0B', light:'rgba(245,158,11,.08)', title:'Branding & Identity',
+                desc:'Logos, colour systems, and brand guidelines that make you stand out.',
+                tags:['Logo Design','Brand Guide','Vector','Revisions'] },
+              { icon:Layers,  color:'#06B6D4', light:'rgba(6,182,212,.08)',  title:'Web Services',
+                desc:'Email setup, CRM integration, cloud databases, and custom APIs.',
+                tags:['Email','CRM','API Dev','Cloud DB'] },
+            ].map(({ icon:Icon, color, light, title, desc, tags })=>(
+              <div key={title} className="svc-card" color="#808080" >
+                <div style={{ width:46,height:46,borderRadius:12,background:light,
+                  display:'flex',alignItems:'center',justifyContent:'center',marginBottom:16 }}>
+                  <Icon size={22} color={color} strokeWidth={1.8}/>
+                </div>
+                <h3 style={{ fontSize:16, fontWeight:700, color:'#1F2937', marginBottom:8 }}>{title}</h3>
+                <p style={{ fontSize:13, color:'#6B7280', lineHeight:1.65, marginBottom:16 }}>{desc}</p>
+                <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom:20 }}>
+                  {tags.map(t=>(
+                    <span key={t} style={{ fontSize:10, fontWeight:700, padding:'3px 10px', borderRadius:99,
+                      background:light, color:color, border:`1px solid ${color}20` }}>{t}</span>
+                  ))}
+                </div>
+                <a href="#/services" style={{ display:'inline-flex', alignItems:'center', gap:6,
+                  fontSize:12, fontWeight:700, color:color, textDecoration:'none' }}>
+                  Learn more <ArrowRight size={12}/>
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════
+            3. PORTFOLIO STRIP — 3 featured pieces
+        ══════════════════════════════════════════ */}
+        <section style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'60px auto 0', padding:'0 20px' }}>
+          <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', flexWrap:'wrap', gap:12, marginBottom:20 }}>
+            <div>
+              <span className="section-label">PORTFOLIO</span>
+              <h2 style={{ fontSize:'clamp(1.4rem,3.5vw,2.2rem)', fontWeight:800, color:'#1F2937', letterSpacing:'-.025em' }}>
+                Recent projects
+              </h2>
+            </div>
+            <a href="#/services" style={{ display:'inline-flex', alignItems:'center', gap:6,
+              fontSize:12, fontWeight:700, color:'#6D28D9', textDecoration:'none' }}>
+              See all <ArrowRight size={12}/>
+            </a>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:12 }}>
+            {[
+              { thumb:'/template/ecommerce.jpg', title:'E-commerce Platform', tech:'React · Stripe', demo:'#/e-commerce' },
+              { thumb:'/template/startup.jpg',   title:'Startup Landing',     tech:'Next.js · Tailwind', demo:'#/startup' },
+              { thumb:'/houses/4.jpeg',          title:'Real Estate Site',    tech:'React · Framer Motion', demo:'#/realtor' },
+            ].map(({ thumb,title,tech,demo })=>(
+              <div key={title} className="port-card" style={{ height:220 }} onClick={()=>window.open(demo,'_blank')}>
+                <img src={thumb} alt={title} loading="lazy" decoding="async" width={400} height={220}/>
+                <div className="port-overlay"/>
+                <div style={{ position:'absolute',bottom:0,left:0,right:0,padding:'16px' }}>
+                  <div style={{ fontSize:10,color:'rgba(255,255,255,.55)',fontWeight:700,letterSpacing:'.07em',marginBottom:3 }}>
+                    {tech.toUpperCase()}
+                  </div>
+                  <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between' }}>
+                    <span style={{ fontSize:14,fontWeight:700,color:'#fff' }}>{title}</span>
+                    <ArrowUpRight size={14} color="rgba(255,255,255,.7)"/>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════
+            4. START A PROJECT — dark CTA
+        ══════════════════════════════════════════ */}
+        <section style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'60px auto 0', padding:'0 20px' }}>
+          <div style={{
+            background:'#1F2937', borderRadius:24, padding:'clamp(32px,5vw,52px) clamp(24px,5vw,56px)',
+            display:'flex', flexWrap:'wrap', alignItems:'center', justifyContent:'space-between', gap:24,
+            position:'relative', overflow:'hidden',
+          }}>
+            <svg aria-hidden="true" style={{ position:'absolute',right:0,top:0,opacity:.06,pointerEvents:'none' }} width="300" height="220">
+              <polygon points="150,10 290,80 290,180 150,210 10,180 10,80" fill="none" stroke="#8B5CF6" strokeWidth="2"/>
+              <polygon points="150,35 255,90 255,165 150,190 45,165 45,90" fill="none" stroke="#06B6D4" strokeWidth="1"/>
+            </svg>
+            <div style={{ position:'relative', zIndex:1 }}>
+              <h2 style={{ fontSize:'clamp(1.4rem,3.5vw,2.2rem)', fontWeight:800, color:'#fff',
+                letterSpacing:'-.025em', lineHeight:1.15, marginBottom:10 }}>
+                Ready to start a project?
+              </h2>
+              <p style={{ fontSize:14, color:'rgba(255,255,255,.6)', lineHeight:1.7, maxWidth:420 }}>
+                Custom websites, brand identities, or backend integrations —
+                let's talk about what you need and build it right.
+              </p>
+            </div>
+            <div style={{ display:'flex', gap:10, flexWrap:'wrap', position:'relative', zIndex:1 }}>
+              <a href="#/Contact-me" style={{
+                display:'inline-flex', alignItems:'center', gap:8,
+                background:'linear-gradient(135deg,#6D28D9,#8B5CF6)', color:'#fff',
+                padding:'13px 26px', borderRadius:99, fontWeight:700, fontSize:14, textDecoration:'none',
+                boxShadow:'0 8px 24px rgba(109,40,217,.35)', transition:'transform .2s',
+              }}
+                onMouseEnter={e=>e.currentTarget.style.transform='scale(1.04)'}
+                onMouseLeave={e=>e.currentTarget.style.transform=''}>
+                <Send size={14}/> Let's talk
+              </a>
+              <a href="#/services" style={{
+                display:'inline-flex', alignItems:'center', gap:8,
+                border:'1.5px solid rgba(255,255,255,.18)', color:'rgba(255,255,255,.85)',
+                padding:'12px 24px', borderRadius:99, fontWeight:700, fontSize:14, textDecoration:'none',
+                transition:'all .2s',
+              }}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,.07)';e.currentTarget.style.borderColor='rgba(255,255,255,.35)'}}
+                onMouseLeave={e=>{e.currentTarget.style.background='';e.currentTarget.style.borderColor='rgba(255,255,255,.18)'}}>
+                Browse services
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════
+            5. FOOTER
+        ══════════════════════════════════════════ */}
+        <footer style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'0 auto', padding:'48px 20px 24px' }}>
+          <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'space-between', alignItems:'center', gap:20, paddingBottom:24,
+            borderBottom:'1px solid rgba(109,40,217,.08)' }}>
+            <div>
+              <div style={{ fontSize:20, fontWeight:800, marginBottom:4,
+                background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+                WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+                CreativeWeb
+              </div>
+              <p style={{ fontSize:12, color:'#9CA3AF' }}>Transforming ideas into digital experiences</p>
+            </div>
+            <nav aria-label="Footer links" style={{ display:'flex', gap:24, flexWrap:'wrap' }}>
+              {[
+                ['LinkedIn','https://www.linkedin.com/in/suwilanji-chellah-01a534239'],
+                ['Services','#/services'],
+                ['Apps','#/apps'],
+                ['Contact','#/Contact-me'],
+              ].map(([l,h])=>(
+                <a key={l} href={h} style={{ color:'#9CA3AF', textDecoration:'none', fontSize:13, fontWeight:500, transition:'color .2s' }}
+                  onMouseEnter={e=>e.currentTarget.style.color='#6D28D9'}
+                  onMouseLeave={e=>e.currentTarget.style.color='#9CA3AF'}>{l}</a>
+              ))}
+            </nav>
+          </div>
+          <p style={{ textAlign:'center', marginTop:20, fontSize:11, color:'#D1D5DB' }}>
+            © {new Date().getFullYear()} CreativeWeb — All rights reserved.
+          </p>
+        </footer>
+
+      </div>
+      <BottomTabBar/>
+    </>
+  );
+}

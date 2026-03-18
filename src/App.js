@@ -1,42 +1,48 @@
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom'; //use hashrouter for single page applications
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
-// Import the components we've created
-import ServicesPage from './Components/Services.jsx';
+// Core pages
 import LandingPageCatalog from './Catalogue.jsx';
-import TemplateDetail from './Components/TemplateDetail.jsx'; // You'll need to create this component
-import LandingPage from './Components/LandingPages/testing.jsx';
-import LuxuryRealEstate from './Components/LandingPages/realtors.jsx';
-import SoccerClubWebsite from './Components/LandingPages/soccer.jsx';
+import ServicesPage       from './Components/Services.jsx';
+import TemplateDetail     from './Components/TemplateDetail.jsx';
+import ContactPage        from './Components/Contact.jsx';
+import AppsPage           from './Components/Apps.jsx';
+
+
+// Template demo pages (unchanged)
+import LandingPage              from './Components/LandingPages/testing.jsx';
+import LuxuryRealEstate         from './Components/LandingPages/realtors.jsx';
+import SoccerClubWebsite        from './Components/LandingPages/soccer.jsx';
 import AnimatedEcommerceWebsite from './Components/LandingPages/ecommerce.jsx';
-import StartupWebsite from './Components/LandingPages/startup.jsx';
-import PortfolioWebsite from './Components/LandingPages/portfolio.jsx';
-import ContactPage from './Components/Contact.jsx';
-
-
+import StartupWebsite           from './Components/LandingPages/startup.jsx';
+import PortfolioWebsite         from './Components/LandingPages/portfolio.jsx';
 
 function App() {
   return (
     <HashRouter>
       <div className="App">
         <Routes>
-	<Route path="/" element={<LandingPageCatalog />} />
-          <Route path="/home" element={<LandingPageCatalog />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/catalog" element={<LandingPageCatalog />} />
+          <Route path="/"           element={<LandingPageCatalog />} />
+          <Route path="/home"       element={<LandingPageCatalog />} />
+          <Route path="/catalog"    element={<LandingPageCatalog />} />
+          <Route path="/services"   element={<ServicesPage />} />
+          <Route path="/apps"       element={<AppsPage />} />
+          <Route path="/Contact-me" element={<ContactPage />} />
+          <Route path="/apps"       element={<AppsPage />} />
           <Route path="/templates/:templateId" element={<TemplateDetail />} />
-          <Route path="/testing" element={<LandingPage />} />
-	  <Route path="/realtor" element= {<LuxuryRealEstate />} />
-	  <Route path="/soccer" element= {<SoccerClubWebsite />} />
-	  <Route path="/startup" element= {<StartupWebsite />} />
-	  <Route path="/e-commerce" element= {<AnimatedEcommerceWebsite />} />
-	  <Route path="/portfolio" element= {<PortfolioWebsite />} />
-	<Route path="/Contact-me" element= {<ContactPage />} />
+
+          {/* Demo routes */}
+          <Route path="/testing"    element={<LandingPage />} />
+          <Route path="/realtor"    element={<LuxuryRealEstate />} />
+          <Route path="/soccer"     element={<SoccerClubWebsite />} />
+          <Route path="/startup"    element={<StartupWebsite />} />
+          <Route path="/e-commerce" element={<AnimatedEcommerceWebsite />} />
+          <Route path="/portfolio"  element={<PortfolioWebsite />} />
         </Routes>
       </div>
     </HashRouter>
   );
 }
 
-export default App;
+export default App;
