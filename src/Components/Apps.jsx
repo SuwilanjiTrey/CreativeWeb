@@ -1,7 +1,10 @@
 //components/Apps.jsx
 import React, { useState, useEffect } from 'react';
-import { Smartphone, Download, Globe, ChevronRight } from 'lucide-react';
+import { Smartphone, Download, Globe, ChevronRight, Mail, BriefcaseBusiness, Building2, Rocket, Landmark } from 'lucide-react';
 import BottomTabBar from './shared/BottomTabBar.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faApple, faAndroid, faGooglePlay, faAppStore } from '@fortawesome/free-brands-svg-icons';
+import { faFutbol, faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 
 /* ── OS Detection ── */
 function detectOS() {
@@ -93,17 +96,20 @@ const PlayBadge = ({ disabled }) => (
 /* ── App data ── */
 const apps = [
   {
-    id: 'argus',
-    name: 'Argus',
+    id: 'truth-storage',
+    name: 'Truth Storage',
     tagline: 'Your Vision, Enhanced',
     desc: 'A sleek dark-mode AI-powered app with animated transitions and intelligent navigation. Built cross-platform with React Native.',
     category: 'Productivity',
-    status: 'coming-soon',
+    status: 'live',
     platforms: ['ios', 'android'],
     icon: '🔮',
+    image: '/cloud.jpg',
     iconBg: 'linear-gradient(135deg,#6D28D9,#8B5CF6)',
     tech: ['React Native', 'AI Integration', 'Framer Motion'],
     color: '#6D28D9',
+    downloadable: true,
+    path: '/apps/TruthStorage.apk'
   },
   {
     id: 'creativeweb-companion',
@@ -114,9 +120,10 @@ const apps = [
     status: 'in-development',
     platforms: ['android'],
     icon: '🌐',
-    iconBg: 'linear-gradient(135deg,#06B6D4,#0891B2)',
+    iconBg: '#040B23',
     tech: ['React Native', 'Firebase', 'Push Notifications'],
     color: '#06B6D4',
+    downloadable: false
   },
   {
     id: 'websnap',
@@ -130,6 +137,7 @@ const apps = [
     iconBg: 'linear-gradient(135deg,#F59E0B,#D97706)',
     tech: ['React Native', 'WebView', 'Cloud Storage'],
     color: '#F59E0B',
+    downloadable: false
   },
 ];
 
@@ -266,7 +274,15 @@ export default function AppsPage() {
                     <div style={{ width:60,height:60,borderRadius:16,flexShrink:0,
                       background:app.iconBg,display:'flex',alignItems:'center',justifyContent:'center',
                       fontSize:26,boxShadow:`0 6px 18px ${app.color}30` }}>
-                      {app.icon}
+                      {app.image ?
+                        <img
+                        	src={app.image}
+                        	alt={app.name}
+                        	style={{borderRadius:20}}
+                        />
+                      	:
+                      	app.icon
+                      }
                     </div>
                     <div>
                       <div style={{ display:'flex',alignItems:'center',flexWrap:'wrap',gap:7,marginBottom:4 }}>
@@ -288,7 +304,15 @@ export default function AppsPage() {
                     {app.platforms.map(p => (
                       <span key={p} style={{ fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:99,
                         background:`${app.color}10`,color:app.color }}>
-                        {p === 'ios' ? '🍎 iOS' : '🤖 Android'}
+                        {p === 'ios' ? 
+                        <p>
+                          IOS <FontAwesomeIcon icon={faApple} />  
+                        </p>                     
+                        : 
+                        <p>
+                         Android <FontAwesomeIcon icon={faAndroid} /> 
+                        </p>
+                         }
                       </span>
                     ))}
                   </div>
@@ -306,22 +330,54 @@ export default function AppsPage() {
                   {/* CTA */}
                   <div style={{ borderTop:'1px solid rgba(109,40,217,.08)',paddingTop:16 }}>
                     {/* Mini disabled store buttons */}
-                    <div style={{ display:'flex',gap:8,flexWrap:'wrap',marginBottom:12 }}>
-                      {app.platforms.includes('ios') && showApple && (
-                        <span style={{ display:'inline-flex',alignItems:'center',gap:5,
-                          background:'#F3F4F6',borderRadius:9,padding:'6px 12px',
-                          fontSize:11,fontWeight:700,color:'#9CA3AF' }}>
-                          🍎 App Store — Soon
-                        </span>
-                      )}
-                      {app.platforms.includes('android') && showAndroid && (
-                        <span style={{ display:'inline-flex',alignItems:'center',gap:5,
-                          background:'#F3F4F6',borderRadius:9,padding:'6px 12px',
-                          fontSize:11,fontWeight:700,color:'#9CA3AF' }}>
-                          🤖 Google Play — Soon
-                        </span>
-                      )}
-                    </div>
+					<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+					  {/* Apple Store Button */}
+					  {app.platforms.includes('ios') && showApple && (
+						<span
+						  style={{
+							display: 'inline-flex',
+							alignItems: 'center',
+							gap: 5,
+							background: '#F3F4F6',
+							borderRadius: 9,
+							padding: '6px 12px',
+							fontSize: 11,
+							fontWeight: 700,
+							color: '#9CA3AF',
+						  }}
+						>
+						  <FontAwesomeIcon icon={faAppStore} /> App Store — Soon
+						</span>
+					  )}
+
+					  {/* Android / Google Play Button */}
+					  {app.platforms.includes('android') && showAndroid && (
+						<span
+						  style={{
+							display: 'inline-flex',
+							alignItems: 'center',
+							gap: 5,
+							background: '#068ec4',
+							borderRadius: 9,
+							padding: '6px 12px',
+							fontSize: 11,
+							fontWeight: 700,
+							color: 'white',
+						  }}
+						>
+						  {app.downloadable ? (
+							<a href={app.path} download style={{ color: 'inherit', display: 'flex', alignItems: 'center' }}>
+							  <Download size={13} />
+							  <span style={{ marginLeft: 5 }}>Download APK</span>
+							</a>
+						  ) : (
+							<>
+							  <FontAwesomeIcon icon={faGooglePlay} /> Google Play — Soon
+							</>
+						  )}
+						</span>
+					  )}
+					</div>
                     {done ? (
                       <p style={{ fontSize:12,color:'#10B981',fontWeight:700 }}>✓ We'll notify you at launch!</p>
                     ) : (
@@ -362,12 +418,12 @@ export default function AppsPage() {
 
             <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:14 }}>
               {[
-                { name:'Agency Landing',   path:'#/testing',    icon:'🏢', color:'#6D28D9' },
-                { name:'Real Estate',      path:'#/realtor',    icon:'🏠', color:'#06B6D4' },
-                { name:'Soccer Club',      path:'#/soccer',     icon:'⚽', color:'#10B981' },
-                { name:'E-commerce Store', path:'#/e-commerce', icon:'🛒', color:'#F59E0B' },
-                { name:'Startup Landing',  path:'#/startup',    icon:'🚀', color:'#8B5CF6' },
-                { name:'Portfolio',        path:'#/portfolio',  icon:'💼', color:'#EC4899' },
+                { name:'Agency Landing Page',   path:'#/testing',    icon:<Landmark size={30}/>, color:'#6D28D9' },
+                { name:'Real Estate Landing page',      path:'#/realtor',    icon:<Building2 size={30} />, color:'#06B6D4' },
+                { name:'Soccer Club',      path:'#/soccer',     icon:<FontAwesomeIcon icon={faFutbol} />, color:'#10B981' },
+                { name:'E-commerce Store', path:'#/e-commerce', icon:<FontAwesomeIcon icon={faBasketShopping} />, color:'#F59E0B' },
+                { name:'Startup Landing page',  path:'#/startup',    icon:<Rocket size={30}/>, color:'#8B5CF6' },
+                { name:'Portfolio template',        path:'#/portfolio',  icon:<BriefcaseBusiness size={30}/>, color:'#EC4899' },
               ].map(w => (
                 <a key={w.name} href={w.path} className="web-link"
                   style={{ display:'flex',alignItems:'center',gap:12,background:'#fff',
@@ -387,8 +443,10 @@ export default function AppsPage() {
         {/* ── CTA ── */}
         <div style={{ maxWidth:1100,margin:'0 auto',padding:'40px 20px 60px',position:'relative',zIndex:1 }}>
           <div style={{ background:'linear-gradient(135deg,#6D28D9,#8B5CF6,#06B6D4)',
-            borderRadius:24,padding:'48px 32px',textAlign:'center' }}>
-            <div style={{ fontSize:28,marginBottom:12 }}>📬</div>
+            borderRadius:24,padding:'48px 32px',textAlign:'center',alignItems:'center',justifyContent:'center' }}>
+            <div style={{ fontSize:28,marginBottom:12,marginLeft:'45%' }}>
+             <Mail size={40} color={'#f7fbfc'} />
+            </div>
             <h2 style={{ fontSize:'clamp(1.4rem,3vw,2rem)',fontWeight:800,color:'#fff',marginBottom:12 }}>
               Want a Custom App Built?
             </h2>
