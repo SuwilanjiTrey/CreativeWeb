@@ -109,7 +109,7 @@ const apps = [
     tech: ['React Native', 'AI Integration', 'Framer Motion'],
     color: '#6D28D9',
     downloadable: true,
-    path: '/apps/TruthStorage.apk'
+    path: 'https://github.com/SuwilanjiTrey/CreativeWeb/releases/download/V1.0.0/TruthStorage.apk'
   },
   {
     id: 'creativeweb-companion',
