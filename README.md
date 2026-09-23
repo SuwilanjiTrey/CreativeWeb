@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="cw/4.png" alt="CreativeWeb" width="100">
+  <img src="public/cw/4.png" alt="CreativeWeb" width="100">
 </p>
 
 <p align="center">
