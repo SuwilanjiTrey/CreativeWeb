@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { ArrowRight, ArrowUpRight, ExternalLink, CheckCircle } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ExternalLink, CheckCircle, Smartphone, Database, Globe, Boxes } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BottomTabBar from './shared/BottomTabBar.jsx';
+import ThemeToggle from './shared/ThemeToggle.jsx';
+import ThemeTokens from './shared/ThemeTokens.jsx';
+import { YatuBand, YatuStrip } from './shared/YatuMobile.jsx';
+
+const mix = (c, p) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
 
 /* ── Neon Polygons ── */
 const NeonPolygons = () => (
@@ -12,16 +17,16 @@ const NeonPolygons = () => (
         <filter id="sc"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <filter id="sa"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
-      <polygon points="55,12 105,12 130,54 105,96 55,96 30,54" fill="none" stroke="#6D28D9" strokeWidth="1.5" strokeOpacity="0.5" filter="url(#sv)" style={{animation:'floatA 14s ease-in-out infinite'}}/>
-      <polygon points="68,28 92,28 104,48 92,68 68,68 56,48" fill="none" stroke="#8B5CF6" strokeWidth="0.7" strokeOpacity="0.3" style={{animation:'floatA 14s ease-in-out infinite'}}/>
-      <polygon points="88%,2% 95%,16% 81%,16%" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeOpacity="0.6" filter="url(#sc)" style={{animation:'floatB 11s ease-in-out infinite'}}/>
-      <polygon points="93%,35% 96%,41% 93%,47% 90%,41%" fill="none" stroke="#06B6D4" strokeWidth="1.1" strokeOpacity="0.4" filter="url(#sc)" style={{animation:'floatC 9s ease-in-out infinite'}}/>
-      <polygon points="82%,74% 87%,71% 92%,75% 92%,82% 87%,86% 82%,86% 77%,82% 77%,75%" fill="none" stroke="#6D28D9" strokeWidth="1.5" strokeOpacity="0.38" filter="url(#sv)" style={{animation:'floatD 16s ease-in-out infinite'}}/>
-      <polygon points="4%,80% 9%,71% 15%,80%" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeOpacity="0.5" filter="url(#sa)" style={{animation:'floatB 12s ease-in-out infinite reverse'}}/>
-      <polygon points="3%,44% 7%,41% 11%,44% 9%,49% 5%,49%" fill="none" stroke="#8B5CF6" strokeWidth="1.1" strokeOpacity="0.38" style={{animation:'floatC 10s ease-in-out infinite reverse'}}/>
-      <polygon points="70%,11% 72%,13% 70%,15% 68%,13%" fill="#06B6D4" fillOpacity="0.38" style={{animation:'floatD 8s ease-in-out infinite'}}/>
-      <polygon points="23%,26% 25%,28% 23%,30% 21%,28%" fill="#8B5CF6" fillOpacity="0.32" style={{animation:'floatB 7s ease-in-out infinite reverse'}}/>
-      <polygon points="58%,87% 60%,89% 58%,91% 56%,89%" fill="#F59E0B" fillOpacity="0.38" style={{animation:'floatC 9s ease-in-out infinite'}}/>
+      <polygon points="55,12 105,12 130,54 105,96 55,96 30,54" fill="none" stroke="var(--primary)" strokeWidth="1.5" strokeOpacity="0.5" filter="url(#sv)" style={{animation:'floatA 14s ease-in-out infinite'}}/>
+      <polygon points="68,28 92,28 104,48 92,68 68,68 56,48" fill="none" stroke="var(--secondary)" strokeWidth="0.7" strokeOpacity="0.3" style={{animation:'floatA 14s ease-in-out infinite'}}/>
+      <polygon points="88%,2% 95%,16% 81%,16%" fill="none" stroke="var(--complement)" strokeWidth="1.5" strokeOpacity="0.6" filter="url(#sc)" style={{animation:'floatB 11s ease-in-out infinite'}}/>
+      <polygon points="93%,35% 96%,41% 93%,47% 90%,41%" fill="none" stroke="var(--complement)" strokeWidth="1.1" strokeOpacity="0.4" filter="url(#sc)" style={{animation:'floatC 9s ease-in-out infinite'}}/>
+      <polygon points="82%,74% 87%,71% 92%,75% 92%,82% 87%,86% 82%,86% 77%,82% 77%,75%" fill="none" stroke="var(--primary)" strokeWidth="1.5" strokeOpacity="0.38" filter="url(#sv)" style={{animation:'floatD 16s ease-in-out infinite'}}/>
+      <polygon points="4%,80% 9%,71% 15%,80%" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeOpacity="0.5" filter="url(#sa)" style={{animation:'floatB 12s ease-in-out infinite reverse'}}/>
+      <polygon points="3%,44% 7%,41% 11%,44% 9%,49% 5%,49%" fill="none" stroke="var(--secondary)" strokeWidth="1.1" strokeOpacity="0.38" style={{animation:'floatC 10s ease-in-out infinite reverse'}}/>
+      <polygon points="70%,11% 72%,13% 70%,15% 68%,13%" fill="var(--complement)" fillOpacity="0.38" style={{animation:'floatD 8s ease-in-out infinite'}}/>
+      <polygon points="23%,26% 25%,28% 23%,30% 21%,28%" fill="var(--secondary)" fillOpacity="0.32" style={{animation:'floatB 7s ease-in-out infinite reverse'}}/>
+      <polygon points="58%,87% 60%,89% 58%,91% 56%,89%" fill="var(--accent)" fillOpacity="0.38" style={{animation:'floatC 9s ease-in-out infinite'}}/>
     </svg>
   </div>
 );
@@ -46,30 +51,42 @@ const BRAND_SAMPLES = [
 const SERVICE_DETAILS = [
   {
     title:'Custom Website Design',
-    color:'#6D28D9', colorLight:'rgba(109,40,217,.08)',
+    color:'var(--primary)', colorLight:'var(--primary-tint)', btn:'var(--btn-grad)',
     features:['Responsive Design','Modern UI/UX','SEO Optimisation','Performance Tuning','Accessibility'],
   },
   {
     title:'Branding & Logo Design',
-    color:'#F59E0B', colorLight:'rgba(245,158,11,.08)',
+    color:'var(--accent)', colorLight:'var(--accent-tint)', btn:'linear-gradient(135deg,#C2703D,#B45F2B)',
     features:['Logo Design','Brand Style Guide','Vector Formats','Unlimited Revisions','Color Systems'],
   },
   {
     title:'Web Services & Integrations',
-    color:'#06B6D4', colorLight:'rgba(6,182,212,.08)',
+    color:'var(--complement)', colorLight:'var(--complement-tint)', btn:'linear-gradient(135deg,#A6803F,#8F6B2E)',
     features:['Custom Email Domains','CRM Integration','API Development','Cloud Databases','Email Marketing'],
+  },
+  {
+    title:'Mobile App Development',
+    color:'var(--primary)', colorLight:'var(--primary-tint)', btn:'var(--btn-grad)',
+    features:['iOS & Android','Cross-platform','Offline-ready','Push Notifications','Store Launch'],
+  },
+  {
+    title:'ERP & Business Systems',
+    color:'var(--complement)', colorLight:'var(--complement-tint)', btn:'linear-gradient(135deg,#A6803F,#8F6B2E)',
+    features:['Inventory','Invoicing & Billing','HR & Payroll','Reports & Dashboards','Custom Workflows'],
   },
 ];
 
 export default function ServicesPage() {
+  const [audience, setAudience] = useState('business');
   return (
     <>
+      <ThemeTokens/>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
-        :root { --primary:#6D28D9; --secondary:#8B5CF6; --complement:#06B6D4; --accent:#F59E0B; --neutral:#1F2937; }
+        :root { --primary:var(--primary); --secondary:var(--secondary); --complement:var(--complement); --accent:var(--accent); --neutral:var(--text); }
         *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
         html { scroll-behavior:smooth; }
-        body { background:#fff; color:#1F2937; font-family:'Poppins',system-ui,sans-serif; }
+        body{background:var(--bg);color:var(--text); font-family:'Poppins',system-ui,sans-serif; }
         img  { display:block; max-width:100%; }
         .page-wrap { padding-bottom:88px; min-height:100vh; }
 
@@ -84,9 +101,9 @@ export default function ServicesPage() {
 
         /* Template card */
         .tpl-card { position:relative; border-radius:16px; overflow:hidden; cursor:pointer;
-          border:1.5px solid rgba(109,40,217,.1); background:#f3f4f6;
+          border:1.5px solid rgba(var(--primary-rgb),.1); background:var(--surface-2);
           transition:transform .25s, box-shadow .25s; }
-        .tpl-card:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(109,40,217,.14); }
+        .tpl-card:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(var(--primary-rgb),.14); }
         .tpl-card img { width:100%; height:100%; object-fit:cover; display:block;
           transition:transform .4s cubic-bezier(.4,0,.2,1); }
         .tpl-card:hover img { transform:scale(1.06); }
@@ -102,7 +119,7 @@ export default function ServicesPage() {
         .tpl-card:hover .preview-btn { opacity:1; }
 
         /* Shimmer placeholder */
-        .img-wrap { position:absolute; inset:0; background:#e5e7eb; overflow:hidden; }
+        .img-wrap { position:absolute; inset:0; background:var(--surface-2); overflow:hidden; }
         .img-wrap::after { content:''; position:absolute; inset:0;
           background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
           animation:shimmer 1.5s infinite; }
@@ -127,9 +144,9 @@ export default function ServicesPage() {
         }
 
         .hover-lift { transition:transform .22s,box-shadow .22s; }
-        .hover-lift:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(109,40,217,.12); }
-        .nav-link { color:#4B5563; text-decoration:none; font-size:13px; font-weight:600; transition:color .2s; }
-        .nav-link:hover { color:#6D28D9; }
+        .hover-lift:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(var(--primary-rgb),.12); }
+        .nav-link { color:var(--muted); text-decoration:none; font-size:13px; font-weight:600; transition:color .2s; }
+        .nav-link:hover { color:var(--primary); }
         .feat-chip { display:inline-flex; align-items:center; gap:5px;
           padding:5px 12px; border-radius:99px; font-size:11px; font-weight:600; }
       `}</style>
@@ -139,20 +156,21 @@ export default function ServicesPage() {
       {/* ── NAV ── */}
       <nav aria-label="Site navigation" style={{
         position:'sticky',top:0,zIndex:50,
-        background:'rgba(255,255,255,.93)',backdropFilter:'blur(18px)',WebkitBackdropFilter:'blur(18px)',
-        borderBottom:'1px solid rgba(109,40,217,.09)',padding:'0 20px',
+        background:'var(--nav-bg)',backdropFilter:'blur(18px)',WebkitBackdropFilter:'blur(18px)',
+        borderBottom:'1px solid rgba(var(--primary-rgb),.09)',padding:'0 20px',
       }}>
         <div style={{ maxWidth:1160,margin:'0 auto',height:56,display:'flex',alignItems:'center',justifyContent:'space-between' }}>
           <a href="#/" style={{ fontSize:20,fontWeight:800,textDecoration:'none',
-            background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+            backgroundImage:'var(--text-grad)',
             WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>
             C.Web
           </a>
-          <div style={{ display:'flex',gap:24,alignItems:'center' }}>
+          <div style={{ display:'flex',gap:18,alignItems:'center' }}>
             {[['Home','#/'],['Services','#/services'],['About','https://suwilanjitreychellah.vercel.app/']].map(([l,h])=>(
               <a key={l} href={h} className="nav-link">{l}</a>
             ))}
-            <a href="#/Contact-me" style={{ background:'linear-gradient(135deg,#6D28D9,#8B5CF6)',color:'#fff',
+            <ThemeToggle/>
+            <a href="#/Contact-me" style={{ background:'var(--btn-grad)',color:'#fff',
               padding:'8px 20px',borderRadius:99,fontSize:12,fontWeight:700,textDecoration:'none' }}>
               Contact
             </a>
@@ -169,18 +187,20 @@ export default function ServicesPage() {
 
           {/* 2-line intro — enough to orient, nothing more */}
           <div className="fade-up" style={{ marginBottom:24 }}>
-            <p style={{ fontSize:11,fontWeight:700,color:'#6D28D9',letterSpacing:'.1em',marginBottom:8 }}>SERVICES</p>
-            <h1 style={{ fontSize:'clamp(1.8rem,5vw,2.8rem)',fontWeight:800,color:'#1F2937',
+            <p style={{ fontSize:11,fontWeight:700,color:'var(--primary)',letterSpacing:'.1em',marginBottom:8 }}>SERVICES</p>
+            <h1 style={{ fontSize:'clamp(1.8rem,5vw,2.8rem)',fontWeight:800,color:'var(--text)',
               letterSpacing:'-.025em',lineHeight:1.1,marginBottom:10 }}>
               Here's what I can{' '}
-              <span style={{ background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+              <span style={{ backgroundImage:'var(--text-grad)',
                 WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>
                 build for you.
               </span>
             </h1>
-            <p style={{ fontSize:13,color:'#6B7280',maxWidth:460 }}>
-              Tap any template to see it live. What you see is what you get.
+            <p style={{ fontSize:13,color:'var(--muted)',maxWidth:460 }}>
+              Websites, mobile apps and ERP systems — plus a payment gateway to get paid.
+              Tap any template below to see it live.
             </p>
+            <YatuStrip/>
           </div>
 
           {/* ── BENTO TEMPLATE GRID — the hero IS the work ── */}
@@ -312,8 +332,8 @@ export default function ServicesPage() {
         <section aria-label="Branding samples" style={{ position:'relative',zIndex:1,maxWidth:1160,margin:'0 auto',padding:'36px 16px' }}>
           <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16,flexWrap:'wrap',gap:10 }}>
             <div>
-              <p style={{ fontSize:11,fontWeight:700,color:'#F59E0B',letterSpacing:'.1em',marginBottom:4 }}>BRANDING</p>
-              <h2 style={{ fontSize:'clamp(1.1rem,3vw,1.5rem)',fontWeight:800,color:'#1F2937',letterSpacing:'-.02em' }}>
+              <p style={{ fontSize:11,fontWeight:700,color:'var(--accent)',letterSpacing:'.1em',marginBottom:4 }}>BRANDING</p>
+              <h2 style={{ fontSize:'clamp(1.1rem,3vw,1.5rem)',fontWeight:800,color:'var(--text)',letterSpacing:'-.02em' }}>
                 Logo & Brand Identity
               </h2>
             </div>
@@ -322,8 +342,8 @@ export default function ServicesPage() {
           <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(120px,1fr))',gap:10 }}>
             {BRAND_SAMPLES.map((b,i)=>(
               <Link to={`/templates/${b.id}`} key={b.id} className="hover-lift"
-                style={{ borderRadius:14,overflow:'hidden',border:'1.5px solid rgba(109,40,217,.1)',
-                  background:'#F9F9FF',aspectRatio:'1',display:'flex',
+                style={{ borderRadius:14,overflow:'hidden',border:'1.5px solid rgba(var(--primary-rgb),.1)',
+                  background:'var(--logo-bg)',aspectRatio:'1',display:'flex',
                   alignItems:'center',justifyContent:'center',textDecoration:'none',
                   animationDelay:`${i*0.06}s` }}>
                 <img src={b.thumb} alt={b.name} loading="lazy" decoding="async"
@@ -334,15 +354,92 @@ export default function ServicesPage() {
         </section>
 
         {/* ══════════════════════════════════
+            THE FULL STACK — build · run · get paid
+        ══════════════════════════════════ */}
+        <section id="full-stack" aria-label="Everything I build"
+          style={{ position:'relative',zIndex:1,maxWidth:1160,margin:'0 auto',padding:'48px 16px 8px' }}>
+          <p style={{ fontSize:11,fontWeight:700,color:'var(--primary)',letterSpacing:'.1em',marginBottom:8 }}>THE FULL STACK</p>
+          <h2 style={{ fontSize:'clamp(1.4rem,3.6vw,2.1rem)',fontWeight:800,color:'var(--text)',
+            letterSpacing:'-.025em',lineHeight:1.15,marginBottom:16 }}>
+            Build it. Run it.{' '}
+            <span style={{ backgroundImage:'var(--text-grad)',
+              WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>Get paid.</span>
+          </h2>
+
+          <div role="tablist" aria-label="I am a…" style={{ display:'inline-flex',padding:4,borderRadius:99,marginBottom:24,
+            background:'var(--surface-2)',border:'1px solid rgba(var(--primary-rgb),.12)' }}>
+            {[['business',"I'm a business"],['developer',"I'm a developer"]].map(([k,l])=>(
+              <button key={k} role="tab" aria-selected={audience===k} onClick={()=>setAudience(k)}
+                style={{ border:'none',cursor:'pointer',padding:'8px 18px',borderRadius:99,fontSize:12,fontWeight:700,
+                  fontFamily:'inherit',transition:'all .2s',
+                  background:audience===k?'var(--btn-grad)':'transparent',
+                  color:audience===k?'#fff':'var(--muted)' }}>{l}</button>
+            ))}
+          </div>
+
+          <div style={{ display:'flex',flexDirection:'column',gap:20 }}>
+            {/* BUILD */}
+            <div style={{ order:audience==='developer'?2:1 }}>
+              <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))',gap:16 }}>
+                {[
+                  { icon:Globe,      color:'var(--primary)',    light:'var(--primary-tint)',    title:'Websites',
+                    desc:'Fast, accessible, SEO-ready sites that turn visitors into customers.' },
+                  { icon:Smartphone, color:'var(--complement)', light:'var(--complement-tint)', title:'Mobile Apps',
+                    desc:'iOS and Android apps that feel native and scale with your users.' },
+                  { icon:Database,   color:'var(--accent)',     light:'var(--accent-tint)',     title:'ERP Systems',
+                    desc:'Inventory, billing, HR and reports in one system built around your business.' },
+                ].map(({ icon:Icon,color,light,title,desc })=>(
+                  <div key={title} className="hover-lift" style={{ background:'var(--surface)',borderRadius:18,padding:24,
+                    border:`1.5px solid ${mix(color,15)}` }}>
+                    <div style={{ width:44,height:44,borderRadius:12,background:light,display:'flex',
+                      alignItems:'center',justifyContent:'center',marginBottom:14 }}>
+                      <Icon size={21} color={color} strokeWidth={1.8}/>
+                    </div>
+                    <h3 style={{ fontSize:16,fontWeight:700,color:'var(--text)',marginBottom:6 }}>{title}</h3>
+                    <p style={{ fontSize:13,color:'var(--muted)',lineHeight:1.65,marginBottom:14 }}>{desc}</p>
+                    <a href="#/Contact-me" style={{ display:'inline-flex',alignItems:'center',gap:6,fontSize:12,
+                      fontWeight:700,color,textDecoration:'none' }}>Start a project <ArrowRight size={12}/></a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* PAY — flagship */}
+            <div style={{ order:audience==='developer'?1:2 }}><YatuBand/></div>
+
+            {/* NEXT */}
+            <div style={{ order:3,display:'flex',alignItems:'center',gap:16,flexWrap:'wrap',padding:'18px 22px',
+              borderRadius:18,border:'1.5px dashed rgba(var(--primary-rgb),.3)' }}>
+              <div style={{ width:42,height:42,borderRadius:12,background:'var(--primary-tint)',display:'flex',
+                alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+                <Boxes size={20} color="var(--primary)" strokeWidth={1.8}/>
+              </div>
+              <div style={{ flex:'1 1 240px' }}>
+                <div style={{ display:'flex',alignItems:'center',gap:8,marginBottom:3 }}>
+                  <h3 style={{ fontSize:15,fontWeight:700,color:'var(--text)' }}>Blockchain payments</h3>
+                  <span style={{ fontSize:9,fontWeight:800,letterSpacing:'.08em',padding:'3px 8px',borderRadius:99,
+                    background:'var(--accent-tint)',color:'var(--accent)' }}>ROADMAP</span>
+                </div>
+                <p style={{ fontSize:12.5,color:'var(--muted)',lineHeight:1.6 }}>
+                  On-chain settlement is planned for YatuMobile. Need it sooner? Tell me what you'd use it for.
+                </p>
+              </div>
+              <a href="#/Contact-me" style={{ fontSize:12,fontWeight:700,color:'var(--primary)',textDecoration:'none',
+                display:'inline-flex',alignItems:'center',gap:6 }}>Share your use case <ArrowRight size={12}/></a>
+            </div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════
             WHAT'S INCLUDED — now user knows
             what they're buying, post-visuals
         ══════════════════════════════════ */}
         <section aria-label="Service details" style={{ position:'relative',zIndex:1,
-          background:'rgba(242, 241, 240)',borderTop:'1px solid rgba(109,40,217,.07)',
-          borderBottom:'1px solid rgba(109,40,217,.07)',padding:'44px 16px' }}>
+          background:'var(--surface-2)',borderTop:'1px solid rgba(var(--primary-rgb),.07)',
+          borderBottom:'1px solid rgba(var(--primary-rgb),.07)',padding:'44px 16px' }}>
           <div style={{ maxWidth:1160,margin:'0 auto' }}>
-            <p style={{ fontSize:11,fontWeight:700,color:'#6D28D9',letterSpacing:'.1em',marginBottom:8 }}>WHAT'S INCLUDED</p>
-            <h2 style={{ fontSize:'clamp(1.2rem,3vw,1.7rem)',fontWeight:800,color:'#1F2937',
+            <p style={{ fontSize:11,fontWeight:700,color:'var(--primary)',letterSpacing:'.1em',marginBottom:8 }}>WHAT'S INCLUDED</p>
+            <h2 style={{ fontSize:'clamp(1.2rem,3vw,1.7rem)',fontWeight:800,color:'var(--text)',
               letterSpacing:'-.02em',marginBottom:28 }}>
               Every project comes with
             </h2>
@@ -350,22 +447,22 @@ export default function ServicesPage() {
             <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:16 }}>
               {SERVICE_DETAILS.map(svc=>(
                 <div key={svc.title} className="hover-lift" style={{
-                  background:'#fff',borderRadius:18,padding:'24px',
-                  border:`1.5px solid ${svc.color}22`,
-                  boxShadow:`0 2px 14px ${svc.color}0a`,
+                  background:'var(--surface)',borderRadius:18,padding:'24px',
+                  border:`1.5px solid ${mix(svc.color,13)}`,
+                  boxShadow:`0 2px 14px ${mix(svc.color,4)}`,
                 }}>
-                  <h3 style={{ fontSize:15,fontWeight:700,color:'#1F2937',marginBottom:16 }}>{svc.title}</h3>
+                  <h3 style={{ fontSize:15,fontWeight:700,color:'var(--text)',marginBottom:16 }}>{svc.title}</h3>
                   <div style={{ display:'flex',flexWrap:'wrap',gap:7 }}>
                     {svc.features.map(f=>(
                       <span key={f} className="feat-chip"
-                        style={{ background:svc.colorLight,color:svc.color,border:`1px solid ${svc.color}20` }}>
+                        style={{ background:svc.colorLight,color:svc.color,border:`1px solid ${mix(svc.color,13)}` }}>
                         <CheckCircle size={10} strokeWidth={2.5}/>{f}
                       </span>
                     ))}
                   </div>
                   <a href="#/Contact-me" style={{
                     display:'inline-flex',alignItems:'center',gap:6,marginTop:18,
-                    background:`linear-gradient(135deg,${svc.color},${svc.color}cc)`,
+                    background:svc.btn,
                     color:'#fff',padding:'9px 18px',borderRadius:99,
                     fontWeight:700,fontSize:12,textDecoration:'none',
                   }}>
@@ -382,7 +479,7 @@ export default function ServicesPage() {
         ══════════════════════════════════ */}
         <div style={{ position:'relative',zIndex:1,maxWidth:1160,margin:'0 auto',padding:'36px 16px 48px' }}>
           <div style={{
-            background:'linear-gradient(135deg,#6D28D9,#8B5CF6 55%,#06B6D4)',
+            background:'var(--cta-grad)',
             borderRadius:22,padding:'clamp(28px,5vw,48px) clamp(20px,5vw,56px)',
             display:'flex',flexWrap:'wrap',alignItems:'center',
             justifyContent:'space-between',gap:20,
@@ -403,7 +500,7 @@ export default function ServicesPage() {
             </div>
             <a href="#/Contact-me" style={{
               display:'inline-flex',alignItems:'center',gap:8,
-              background:'#fff',color:'#6D28D9',
+              background:'#fff',color:'#4A1A5C',
               padding:'12px 28px',borderRadius:99,fontWeight:800,
               fontSize:14,textDecoration:'none',flexShrink:0,
               boxShadow:'0 6px 24px rgba(0,0,0,.14)',
@@ -419,4 +516,4 @@ export default function ServicesPage() {
       <BottomTabBar/>
     </>
   );
-}
+}

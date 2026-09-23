@@ -19,11 +19,11 @@ const BottomTabBar = () => {
       aria-label="Main navigation"
       style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(255,255,255,0.94)',
+        background: 'var(--nav-bg)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderTop: '1px solid rgba(109,40,217,0.1)',
-        boxShadow: '0 -4px 30px rgba(109,40,217,0.07)',
+        borderTop: '1px solid rgba(var(--primary-rgb),0.1)',
+        boxShadow: '0 -4px 30px rgba(var(--primary-rgb),0.07)',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -53,19 +53,19 @@ const BottomTabBar = () => {
             <span style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               width: 34, height: 34, borderRadius: 10,
-              background: active ? 'rgba(109,40,217,0.12)' : 'transparent',
+              background: active ? 'rgba(var(--primary-rgb),0.12)' : 'transparent',
               transition: 'background 0.2s',
             }}>
               <Icon
                 size={19}
                 strokeWidth={active ? 2.5 : 1.8}
-                color={active ? '#6D28D9' : '#9CA3AF'}
+                color={active ? 'var(--primary)' : 'var(--faint)'}
               />
             </span>
             <span style={{
               fontSize: 10, fontWeight: active ? 700 : 500,
               letterSpacing: '0.02em',
-              color: active ? '#6D28D9' : '#9CA3AF',
+              color: active ? 'var(--primary)' : 'var(--faint)',
               whiteSpace: 'nowrap',
             }}>
               {label}

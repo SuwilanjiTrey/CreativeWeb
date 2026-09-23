@@ -5,6 +5,10 @@ import BottomTabBar from './shared/BottomTabBar.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faApple, faAndroid, faGooglePlay, faAppStore } from '@fortawesome/free-brands-svg-icons';
 import { faFutbol, faBasketShopping } from '@fortawesome/free-solid-svg-icons';
+import ThemeToggle from './shared/ThemeToggle.jsx';
+import ThemeTokens from './shared/ThemeTokens.jsx';
+
+const mix = (c, p) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
 
 /* ── OS Detection ── */
 function detectOS() {
@@ -20,10 +24,10 @@ const BlobBg = () => (
     style={{ position:'absolute',inset:0,width:'100%',height:'100%',
       pointerEvents:'none',zIndex:0,overflow:'visible' }}>
     <defs>
-      <radialGradient id="ag1"><stop offset="0%" stopColor="#6D28D9" stopOpacity="0.13"/><stop offset="100%" stopColor="#6D28D9" stopOpacity="0"/></radialGradient>
-      <radialGradient id="ag2"><stop offset="0%" stopColor="#06B6D4" stopOpacity="0.11"/><stop offset="100%" stopColor="#06B6D4" stopOpacity="0"/></radialGradient>
-      <radialGradient id="ag3"><stop offset="0%" stopColor="#F59E0B" stopOpacity="0.09"/><stop offset="100%" stopColor="#F59E0B" stopOpacity="0"/></radialGradient>
-      <radialGradient id="ag4"><stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.10"/><stop offset="100%" stopColor="#8B5CF6" stopOpacity="0"/></radialGradient>
+      <radialGradient id="ag1"><stop offset="0%" stopColor="var(--primary)" stopOpacity="0.13"/><stop offset="100%" stopColor="var(--primary)" stopOpacity="0"/></radialGradient>
+      <radialGradient id="ag2"><stop offset="0%" stopColor="var(--complement)" stopOpacity="0.11"/><stop offset="100%" stopColor="var(--complement)" stopOpacity="0"/></radialGradient>
+      <radialGradient id="ag3"><stop offset="0%" stopColor="var(--accent)" stopOpacity="0.09"/><stop offset="100%" stopColor="var(--accent)" stopOpacity="0"/></radialGradient>
+      <radialGradient id="ag4"><stop offset="0%" stopColor="var(--secondary)" stopOpacity="0.10"/><stop offset="100%" stopColor="var(--secondary)" stopOpacity="0"/></radialGradient>
     </defs>
     <ellipse cx="8%"  cy="18%" rx="42%" ry="34%" fill="url(#ag1)"/>
     <ellipse cx="92%" cy="22%" rx="36%" ry="30%" fill="url(#ag2)"/>
@@ -36,8 +40,8 @@ const BlobBg = () => (
 const AppleBadge = ({ disabled }) => (
   <button disabled={disabled}
     style={{ display:'inline-flex',alignItems:'center',gap:12,
-      background: disabled ? '#E5E7EB' : '#1F2937',
-      color: disabled ? '#9CA3AF' : '#fff',
+      background: disabled ? 'var(--disabled-bg)' : 'var(--badge-bg)',
+      color: disabled ? 'var(--faint)' : '#fff',
       border:'none',borderRadius:14,padding:'12px 22px',
       cursor: disabled ? 'not-allowed' : 'pointer',
       boxShadow: disabled ? 'none' : '0 6px 20px rgba(0,0,0,.18)',
@@ -46,8 +50,8 @@ const AppleBadge = ({ disabled }) => (
     onMouseEnter={e=>{ if(!disabled){ e.currentTarget.style.transform='scale(1.04)'; }}}
     onMouseLeave={e=>{ e.currentTarget.style.transform=''; }}>
     <svg width="22" height="26" viewBox="0 0 22 26" fill="none">
-      <path d="M18.066 13.816c-.03-3.26 2.664-4.84 2.785-4.917-1.52-2.22-3.882-2.524-4.716-2.553-2-.205-3.918 1.19-4.935 1.19-1.02 0-2.587-1.165-4.261-1.133-2.183.033-4.203 1.283-5.322 3.24-2.27 3.94-.58 9.763 1.632 12.956 1.08 1.567 2.365 3.323 4.044 3.26 1.626-.066 2.235-1.047 4.198-1.047 1.963 0 2.52 1.047 4.232 1.012 1.748-.03 2.854-1.584 3.924-3.157 1.24-1.81 1.75-3.564 1.78-3.657-.04-.016-3.41-1.308-3.44-5.194z" fill={disabled?'#9CA3AF':'white'}/>
-      <path d="M14.752 4.48C15.64 3.4 16.24 1.91 16.07.4c-1.304.056-2.88.87-3.81 1.966-.836.966-1.57 2.51-1.372 3.99 1.456.112 2.945-.74 3.864-1.876z" fill={disabled?'#9CA3AF':'white'}/>
+      <path d="M18.066 13.816c-.03-3.26 2.664-4.84 2.785-4.917-1.52-2.22-3.882-2.524-4.716-2.553-2-.205-3.918 1.19-4.935 1.19-1.02 0-2.587-1.165-4.261-1.133-2.183.033-4.203 1.283-5.322 3.24-2.27 3.94-.58 9.763 1.632 12.956 1.08 1.567 2.365 3.323 4.044 3.26 1.626-.066 2.235-1.047 4.198-1.047 1.963 0 2.52 1.047 4.232 1.012 1.748-.03 2.854-1.584 3.924-3.157 1.24-1.81 1.75-3.564 1.78-3.657-.04-.016-3.41-1.308-3.44-5.194z" fill={disabled?'var(--faint)':'white'}/>
+      <path d="M14.752 4.48C15.64 3.4 16.24 1.91 16.07.4c-1.304.056-2.88.87-3.81 1.966-.836.966-1.57 2.51-1.372 3.99 1.456.112 2.945-.74 3.864-1.876z" fill={disabled?'var(--faint)':'white'}/>
     </svg>
     <div style={{ textAlign:'left' }}>
       <div style={{ fontSize:9,fontWeight:500,opacity:.75,letterSpacing:'.04em' }}>
@@ -56,7 +60,7 @@ const AppleBadge = ({ disabled }) => (
       <div style={{ fontSize:16,fontWeight:700,lineHeight:1.1 }}>App Store</div>
     </div>
     {disabled && (
-      <span style={{ position:'absolute',top:-7,right:-7,background:'#F59E0B',color:'#fff',
+      <span style={{ position:'absolute',top:-7,right:-7,background:'#B45F2B',color:'#fff',
         fontSize:9,fontWeight:800,padding:'2px 7px',borderRadius:99 }}>SOON</span>
     )}
   </button>
@@ -65,8 +69,8 @@ const AppleBadge = ({ disabled }) => (
 const PlayBadge = ({ disabled }) => (
   <button disabled={disabled}
     style={{ display:'inline-flex',alignItems:'center',gap:12,
-      background: disabled ? '#E5E7EB' : '#1F2937',
-      color: disabled ? '#9CA3AF' : '#fff',
+      background: disabled ? 'var(--disabled-bg)' : 'var(--badge-bg)',
+      color: disabled ? 'var(--faint)' : '#fff',
       border:'none',borderRadius:14,padding:'12px 22px',
       cursor: disabled ? 'not-allowed' : 'pointer',
       boxShadow: disabled ? 'none' : '0 6px 20px rgba(0,0,0,.18)',
@@ -75,10 +79,10 @@ const PlayBadge = ({ disabled }) => (
     onMouseEnter={e=>{ if(!disabled){ e.currentTarget.style.transform='scale(1.04)'; }}}
     onMouseLeave={e=>{ e.currentTarget.style.transform=''; }}>
     <svg width="20" height="22" viewBox="0 0 22 24" fill="none">
-      <path d="M1.22 0.396C0.852 0.771 0.63 1.354 0.63 2.107V21.893C0.63 22.646 0.852 23.229 1.22 23.604L1.315 23.696L12.626 12.386V12.107L1.315 0.303L1.22 0.396Z" fill={disabled?'#9CA3AF':'#4FC3F7'}/>
-      <path d="M16.472 16.234L12.626 12.386V12.107L16.472 8.259L16.586 8.323L21.169 10.922C22.458 11.651 22.458 12.842 21.169 13.572L16.586 16.171L16.472 16.234Z" fill={disabled?'#9CA3AF':'#FFCA28'}/>
-      <path d="M16.587 16.17L12.626 12.247L1.22 23.604C1.652 24.062 2.364 24.119 3.163 23.663L16.587 16.17Z" fill={disabled?'#9CA3AF':'#F44336'}/>
-      <path d="M16.587 8.323L3.163 0.83C2.364 0.375 1.652 0.432 1.22 0.89L12.626 12.247L16.587 8.323Z" fill={disabled?'#9CA3AF':'#4CAF50'}/>
+      <path d="M1.22 0.396C0.852 0.771 0.63 1.354 0.63 2.107V21.893C0.63 22.646 0.852 23.229 1.22 23.604L1.315 23.696L12.626 12.386V12.107L1.315 0.303L1.22 0.396Z" fill={disabled?'var(--faint)':'#4FC3F7'}/>
+      <path d="M16.472 16.234L12.626 12.386V12.107L16.472 8.259L16.586 8.323L21.169 10.922C22.458 11.651 22.458 12.842 21.169 13.572L16.586 16.171L16.472 16.234Z" fill={disabled?'var(--faint)':'#FFCA28'}/>
+      <path d="M16.587 16.17L12.626 12.247L1.22 23.604C1.652 24.062 2.364 24.119 3.163 23.663L16.587 16.17Z" fill={disabled?'var(--faint)':'#F44336'}/>
+      <path d="M16.587 8.323L3.163 0.83C2.364 0.375 1.652 0.432 1.22 0.89L12.626 12.247L16.587 8.323Z" fill={disabled?'var(--faint)':'#4CAF50'}/>
     </svg>
     <div style={{ textAlign:'left' }}>
       <div style={{ fontSize:9,fontWeight:500,opacity:.75,letterSpacing:'.04em' }}>
@@ -87,7 +91,7 @@ const PlayBadge = ({ disabled }) => (
       <div style={{ fontSize:16,fontWeight:700,lineHeight:1.1 }}>Google Play</div>
     </div>
     {disabled && (
-      <span style={{ position:'absolute',top:-7,right:-7,background:'#F59E0B',color:'#fff',
+      <span style={{ position:'absolute',top:-7,right:-7,background:'#B45F2B',color:'#fff',
         fontSize:9,fontWeight:800,padding:'2px 7px',borderRadius:99 }}>SOON</span>
     )}
   </button>
@@ -105,9 +109,9 @@ const apps = [
     platforms: ['ios', 'android'],
     icon: '🔮',
     image: '/cloud.jpg',
-    iconBg: 'linear-gradient(135deg,#6D28D9,#8B5CF6)',
+    iconBg: 'var(--btn-grad)',
     tech: ['React Native', 'AI Integration', 'Framer Motion'],
-    color: '#6D28D9',
+    color: 'var(--primary)',
     downloadable: true,
     path: 'https://github.com/SuwilanjiTrey/CreativeWeb/releases/download/V1.0.0/TruthStorage.apk'
   },
@@ -122,7 +126,7 @@ const apps = [
     icon: '🌐',
     iconBg: '#040B23',
     tech: ['React Native', 'Firebase', 'Push Notifications'],
-    color: '#06B6D4',
+    color: 'var(--complement)',
     downloadable: false
   },
   {
@@ -134,18 +138,18 @@ const apps = [
     status: 'planned',
     platforms: ['ios', 'android'],
     icon: '📱',
-    iconBg: 'linear-gradient(135deg,#F59E0B,#D97706)',
+    iconBg: 'linear-gradient(135deg,#C2703D,#B45F2B)',
     tech: ['React Native', 'WebView', 'Cloud Storage'],
-    color: '#F59E0B',
+    color: 'var(--accent)',
     downloadable: false
   },
 ];
 
 const statusConfig = {
-  'coming-soon':    { label:'Coming Soon',    bg:'#FEF3C7', color:'#D97706', dot:'#F59E0B' },
-  'in-development': { label:'In Development', bg:'#EDE9FE', color:'#6D28D9', dot:'#8B5CF6' },
-  'planned':        { label:'Planned',         bg:'#E0F2FE', color:'#0369A1', dot:'#06B6D4' },
-  'live':           { label:'Live',            bg:'#D1FAE5', color:'#065F46', dot:'#10B981' },
+  'coming-soon':    { label:'Coming Soon',    bg:'var(--accent-tint)', color:'var(--accent)', dot:'var(--accent)' },
+  'in-development': { label:'In Development', bg:'var(--primary-tint)', color:'var(--primary)', dot:'var(--secondary)' },
+  'planned':        { label:'Planned',         bg:'var(--complement-tint)', color:'var(--complement)', dot:'var(--complement)' },
+  'live':           { label:'Live',            bg:'rgba(16,185,129,.14)', color:'var(--success)', dot:'#10B981' },
 };
 
 export default function AppsPage() {
@@ -165,35 +169,38 @@ export default function AppsPage() {
 
   return (
     <>
+      <ThemeTokens/>
       <style>{`
-        :root{--primary:#6D28D9;--secondary:#8B5CF6;--complement:#06B6D4;--accent:#F59E0B;--neutral:#1F2937}
         *{box-sizing:border-box;margin:0;padding:0}
-        body{background:#fff;color:#1F2937;font-family:'Segoe UI',system-ui,sans-serif}
+        body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif}
         .page-wrap{padding-bottom:88px;min-height:100vh}
         @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
         .fade-up{animation:fadeUp .6s ease both}
         .app-card{transition:transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s}
-        .app-card:hover{transform:translateY(-5px);box-shadow:0 16px 44px rgba(109,40,217,.12)}
+        .app-card:hover{transform:translateY(-5px);box-shadow:0 16px 44px rgba(var(--primary-rgb),.12)}
         .web-link{transition:all .2s}
         .web-link:hover{transform:translateY(-2px)}
       `}</style>
 
       {/* ── NAV ── */}
       <nav aria-label="Site navigation"
-        style={{ position:'sticky',top:0,zIndex:50,background:'rgba(255,255,255,0.95)',
+        style={{ position:'sticky',top:0,zIndex:50,background:'var(--nav-bg)',
           backdropFilter:'blur(16px)',WebkitBackdropFilter:'blur(16px)',
-          borderBottom:'1px solid rgba(109,40,217,.1)',padding:'0 20px' }}>
+          borderBottom:'1px solid rgba(var(--primary-rgb),.1)',padding:'0 20px' }}>
         <div style={{ maxWidth:1100,margin:'0 auto',height:60,display:'flex',
           alignItems:'center',justifyContent:'space-between' }}>
           <a href="#/" style={{ fontSize:20,fontWeight:800,textDecoration:'none',
-            background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+            backgroundImage:'var(--text-grad)',
             WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>
             CreativeWeb
           </a>
-          <a href="#/Contact-me" style={{ background:'linear-gradient(135deg,#6D28D9,#8B5CF6)',
-            color:'#fff',padding:'8px 20px',borderRadius:99,fontSize:13,fontWeight:700,textDecoration:'none' }}>
-            Contact
-          </a>
+          <div style={{ display:'flex',gap:14,alignItems:'center' }}>
+            <ThemeToggle/>
+            <a href="#/Contact-me" style={{ background:'var(--btn-grad)',
+              color:'#fff',padding:'8px 20px',borderRadius:99,fontSize:13,fontWeight:700,textDecoration:'none' }}>
+              Contact
+            </a>
+          </div>
         </div>
       </nav>
 
@@ -203,31 +210,31 @@ export default function AppsPage() {
         {/* ── HERO ── */}
         <header style={{ position:'relative',zIndex:1,textAlign:'center',padding:'60px 20px 52px' }}>
           <div className="fade-up" style={{ display:'inline-flex',alignItems:'center',gap:7,
-            background:'rgba(109,40,217,.08)',border:'1px solid rgba(109,40,217,.18)',
+            background:'rgba(var(--primary-rgb),.08)',border:'1px solid rgba(var(--primary-rgb),.18)',
             borderRadius:99,padding:'6px 16px',marginBottom:24 }}>
-            <Smartphone size={13} color="#6D28D9"/>
-            <span style={{ fontSize:12,fontWeight:700,color:'#6D28D9',letterSpacing:'.05em' }}>
+            <Smartphone size={13} color="var(--primary)"/>
+            <span style={{ fontSize:12,fontWeight:700,color:'var(--primary)',letterSpacing:'.05em' }}>
               {os === 'ios' ? 'iOS Apps' : os === 'android' ? 'Android Apps' : 'Mobile Apps'}
             </span>
           </div>
 
           <h1 className="fade-up" style={{ fontSize:'clamp(2rem,5vw,3.4rem)',fontWeight:800,
-            color:'#1F2937',letterSpacing:'-.025em',lineHeight:1.1,animationDelay:'.1s' }}>
+            color:'var(--text)',letterSpacing:'-.025em',lineHeight:1.1,animationDelay:'.1s' }}>
             Apps Built for{' '}
-            <span style={{ background:'linear-gradient(135deg,#6D28D9,#06B6D4)',
+            <span style={{ backgroundImage:'var(--text-grad)',
               WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>
               Real People
             </span>
           </h1>
-          <p className="fade-up" style={{ marginTop:16,color:'#6B7280',fontSize:16,
+          <p className="fade-up" style={{ marginTop:16,color:'var(--muted)',fontSize:16,
             maxWidth:500,marginInline:'auto',lineHeight:1.7,animationDelay:'.2s' }}>
             Mobile apps built with React Native — cross-platform, performant, and crafted with
             the same attention to detail as my web work.
           </p>
           {os !== 'other' && (
-            <p className="fade-up" style={{ marginTop:14,fontSize:12,color:'#6B7280',animationDelay:'.3s' }}>
+            <p className="fade-up" style={{ marginTop:14,fontSize:12,color:'var(--muted)',animationDelay:'.3s' }}>
               🎯 Detected:{' '}
-              <strong style={{ color:'#6D28D9' }}>{os === 'ios' ? 'iOS / iPhone' : 'Android'}</strong>
+              <strong style={{ color:'var(--primary)' }}>{os === 'ios' ? 'iOS / iPhone' : 'Android'}</strong>
               {' '}— showing relevant store options
             </p>
           )}
@@ -235,16 +242,16 @@ export default function AppsPage() {
 
         {/* ── STORE BANNER ── */}
         <div style={{ position:'relative',zIndex:1,maxWidth:680,margin:'0 auto 56px',padding:'0 20px' }}>
-          <div style={{ background:'linear-gradient(135deg,#1F2937,#374151)',borderRadius:24,padding:'32px',textAlign:'center' }}>
-            <p style={{ fontSize:11,fontWeight:700,color:'#6B7280',letterSpacing:'.08em',marginBottom:6 }}>AVAILABLE ON</p>
+          <div style={{ background:'var(--banner-grad)',borderRadius:24,padding:'32px',textAlign:'center' }}>
+            <p style={{ fontSize:11,fontWeight:700,color:'rgba(255,255,255,.55)',letterSpacing:'.08em',marginBottom:6 }}>AVAILABLE ON</p>
             <p style={{ fontSize:18,fontWeight:800,color:'#fff',marginBottom:24 }}>Store listings coming soon</p>
             <div style={{ display:'flex',flexWrap:'wrap',gap:14,justifyContent:'center' }}>
               {showApple   && <AppleBadge disabled/>}
               {showAndroid && <PlayBadge  disabled/>}
             </div>
-            <p style={{ fontSize:12,color:'#6B7280',marginTop:16,lineHeight:1.6 }}>
+            <p style={{ fontSize:12,color:'rgba(255,255,255,.6)',marginTop:16,lineHeight:1.6 }}>
               Developer accounts are being set up.{' '}
-              <a href="#/Contact-me" style={{ color:'#8B5CF6',fontWeight:600,textDecoration:'none' }}>
+              <a href="#/Contact-me" style={{ color:'#D4A9E6',fontWeight:600,textDecoration:'none' }}>
                 Get notified when apps launch →
               </a>
             </p>
@@ -254,7 +261,7 @@ export default function AppsPage() {
         {/* ── APP CARDS ── */}
         <section aria-label="App products"
           style={{ position:'relative',zIndex:1,maxWidth:1100,margin:'0 auto',padding:'0 20px 60px' }}>
-          <h2 style={{ fontSize:'clamp(1.3rem,3vw,1.8rem)',fontWeight:800,color:'#1F2937',
+          <h2 style={{ fontSize:'clamp(1.3rem,3vw,1.8rem)',fontWeight:800,color:'var(--text)',
             letterSpacing:'-.02em',marginBottom:28 }}>
             Products in the Pipeline
           </h2>
@@ -265,15 +272,15 @@ export default function AppsPage() {
               const done = notified[app.id];
               return (
                 <article key={app.id} className="app-card"
-                  style={{ background:'#fff',borderRadius:22,border:'1.5px solid rgba(109,40,217,.1)',
-                    padding:'28px',boxShadow:'0 4px 20px rgba(109,40,217,.06)',
+                  style={{ background:'var(--surface)',borderRadius:22,border:'1.5px solid rgba(var(--primary-rgb),.1)',
+                    padding:'28px',boxShadow:'0 4px 20px rgba(var(--primary-rgb),.06)',
                     animationDelay:`${i * 0.08}s` }}>
 
                   {/* Header row */}
                   <div style={{ display:'flex',gap:14,alignItems:'flex-start',marginBottom:16 }}>
                     <div style={{ width:60,height:60,borderRadius:16,flexShrink:0,
                       background:app.iconBg,display:'flex',alignItems:'center',justifyContent:'center',
-                      fontSize:26,boxShadow:`0 6px 18px ${app.color}30` }}>
+                      fontSize:26,boxShadow:`0 6px 18px ${mix(app.color,19)}` }}>
                       {app.image ?
                         <img
                         	src={app.image}
@@ -286,7 +293,7 @@ export default function AppsPage() {
                     </div>
                     <div>
                       <div style={{ display:'flex',alignItems:'center',flexWrap:'wrap',gap:7,marginBottom:4 }}>
-                        <h3 style={{ fontSize:17,fontWeight:800,color:'#1F2937' }}>{app.name}</h3>
+                        <h3 style={{ fontSize:17,fontWeight:800,color:'var(--text)' }}>{app.name}</h3>
                         <span style={{ fontSize:10,fontWeight:700,padding:'3px 9px',borderRadius:99,
                           background:st.bg,color:st.color,display:'inline-flex',alignItems:'center',gap:4 }}>
                           <span style={{ width:5,height:5,borderRadius:'50%',background:st.dot,display:'inline-block' }}/>
@@ -300,10 +307,10 @@ export default function AppsPage() {
                   {/* Chips */}
                   <div style={{ display:'flex',gap:7,marginBottom:14,flexWrap:'wrap' }}>
                     <span style={{ fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:99,
-                      background:'#F3F4F6',color:'#4B5563' }}>{app.category}</span>
+                      background:'var(--surface-2)',color:'var(--muted)' }}>{app.category}</span>
                     {app.platforms.map(p => (
                       <span key={p} style={{ fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:99,
-                        background:`${app.color}10`,color:app.color }}>
+                        background:`${mix(app.color,6)}`,color:app.color }}>
                         {p === 'ios' ? 
                         <p>
                           IOS <FontAwesomeIcon icon={faApple} />  
@@ -317,18 +324,18 @@ export default function AppsPage() {
                     ))}
                   </div>
 
-                  <p style={{ fontSize:13,color:'#6B7280',lineHeight:1.7,marginBottom:16 }}>{app.desc}</p>
+                  <p style={{ fontSize:13,color:'var(--muted)',lineHeight:1.7,marginBottom:16 }}>{app.desc}</p>
 
                   {/* Tech tags */}
                   <div style={{ display:'flex',flexWrap:'wrap',gap:6,marginBottom:20 }}>
                     {app.tech.map(t => (
                       <span key={t} style={{ fontSize:10,fontWeight:700,padding:'3px 9px',borderRadius:99,
-                        border:`1px solid ${app.color}25`,color:app.color,letterSpacing:'.03em' }}>{t}</span>
+                        border:`1px solid ${mix(app.color,15)}`,color:app.color,letterSpacing:'.03em' }}>{t}</span>
                     ))}
                   </div>
 
                   {/* CTA */}
-                  <div style={{ borderTop:'1px solid rgba(109,40,217,.08)',paddingTop:16 }}>
+                  <div style={{ borderTop:'1px solid rgba(var(--primary-rgb),.08)',paddingTop:16 }}>
                     {/* Mini disabled store buttons */}
 					<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
 					  {/* Apple Store Button */}
@@ -338,12 +345,12 @@ export default function AppsPage() {
 							display: 'inline-flex',
 							alignItems: 'center',
 							gap: 5,
-							background: '#F3F4F6',
+							background: 'var(--surface-2)',
 							borderRadius: 9,
 							padding: '6px 12px',
 							fontSize: 11,
 							fontWeight: 700,
-							color: '#9CA3AF',
+							color: 'var(--faint)',
 						  }}
 						>
 						  <FontAwesomeIcon icon={faAppStore} /> App Store — Soon
@@ -357,7 +364,7 @@ export default function AppsPage() {
 							display: 'inline-flex',
 							alignItems: 'center',
 							gap: 5,
-							background: '#068ec4',
+							background: 'var(--btn-grad)',
 							borderRadius: 9,
 							padding: '6px 12px',
 							fontSize: 11,
@@ -379,15 +386,15 @@ export default function AppsPage() {
 					  )}
 					</div>
                     {done ? (
-                      <p style={{ fontSize:12,color:'#10B981',fontWeight:700 }}>✓ We'll notify you at launch!</p>
+                      <p style={{ fontSize:12,color:'var(--success)',fontWeight:700 }}>✓ We'll notify you at launch!</p>
                     ) : (
                       <button onClick={() => handleNotify(app)}
                         style={{ display:'inline-flex',alignItems:'center',gap:7,
-                          background:'none',border:`1.5px solid ${app.color}30`,
+                          background:'none',border:`1.5px solid ${mix(app.color,19)}`,
                           color:app.color,borderRadius:10,padding:'8px 14px',
                           cursor:'pointer',fontSize:12,fontWeight:700,transition:'all .2s' }}
-                        onMouseEnter={e=>{e.currentTarget.style.background=`${app.color}0e`;e.currentTarget.style.borderColor=app.color}}
-                        onMouseLeave={e=>{e.currentTarget.style.background='none';e.currentTarget.style.borderColor=`${app.color}30`}}>
+                        onMouseEnter={e=>{e.currentTarget.style.background=`${mix(app.color,5)}`;e.currentTarget.style.borderColor=app.color}}
+                        onMouseLeave={e=>{e.currentTarget.style.background='none';e.currentTarget.style.borderColor=`${mix(app.color,19)}`}}>
                         <Download size={13}/> Notify me at launch
                       </button>
                     )}
@@ -400,39 +407,39 @@ export default function AppsPage() {
 
         {/* ── WEB PROJECTS STRIP ── */}
         <section aria-label="Web projects"
-          style={{ background:'#FAFAFA',borderTop:'1px solid rgba(109,40,217,.08)',padding:'52px 20px 56px' }}>
+          style={{ background:'var(--surface-2)',borderTop:'1px solid rgba(var(--primary-rgb),.08)',padding:'52px 20px 56px' }}>
           <div style={{ maxWidth:1100,margin:'0 auto' }}>
             <div style={{ display:'flex',justifyContent:'space-between',alignItems:'center',
               flexWrap:'wrap',gap:12,marginBottom:24 }}>
               <div>
-                <h2 style={{ fontSize:'clamp(1.3rem,3vw,1.8rem)',fontWeight:800,color:'#1F2937',letterSpacing:'-.02em' }}>
+                <h2 style={{ fontSize:'clamp(1.3rem,3vw,1.8rem)',fontWeight:800,color:'var(--text)',letterSpacing:'-.02em' }}>
                   Web Projects
                 </h2>
-                <p style={{ fontSize:13,color:'#6B7280',marginTop:4 }}>Live — preview right now on your device</p>
+                <p style={{ fontSize:13,color:'var(--muted)',marginTop:4 }}>Live — preview right now on your device</p>
               </div>
               <a href="#/services" style={{ display:'inline-flex',alignItems:'center',gap:5,
-                color:'#6D28D9',fontWeight:700,fontSize:13,textDecoration:'none' }}>
+                color:'var(--primary)',fontWeight:700,fontSize:13,textDecoration:'none' }}>
                 All services <ChevronRight size={14}/>
               </a>
             </div>
 
             <div style={{ display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:14 }}>
               {[
-                { name:'Agency Landing Page',   path:'#/testing',    icon:<Landmark size={30}/>, color:'#6D28D9' },
-                { name:'Real Estate Landing page',      path:'#/realtor',    icon:<Building2 size={30} />, color:'#06B6D4' },
+                { name:'Agency Landing Page',   path:'#/testing',    icon:<Landmark size={30}/>, color:'var(--primary)' },
+                { name:'Real Estate Landing page',      path:'#/realtor',    icon:<Building2 size={30} />, color:'var(--complement)' },
                 { name:'Soccer Club',      path:'#/soccer',     icon:<FontAwesomeIcon icon={faFutbol} />, color:'#10B981' },
-                { name:'E-commerce Store', path:'#/e-commerce', icon:<FontAwesomeIcon icon={faBasketShopping} />, color:'#F59E0B' },
-                { name:'Startup Landing page',  path:'#/startup',    icon:<Rocket size={30}/>, color:'#8B5CF6' },
-                { name:'Portfolio template',        path:'#/portfolio',  icon:<BriefcaseBusiness size={30}/>, color:'#EC4899' },
+                { name:'E-commerce Store', path:'#/e-commerce', icon:<FontAwesomeIcon icon={faBasketShopping} />, color:'var(--accent)' },
+                { name:'Startup Landing page',  path:'#/startup',    icon:<Rocket size={30}/>, color:'var(--secondary)' },
+                { name:'Portfolio template',        path:'#/portfolio',  icon:<BriefcaseBusiness size={30}/>, color:'#C45A86' },
               ].map(w => (
                 <a key={w.name} href={w.path} className="web-link"
-                  style={{ display:'flex',alignItems:'center',gap:12,background:'#fff',
-                    borderRadius:14,padding:'14px 16px',border:'1.5px solid rgba(109,40,217,.08)',
+                  style={{ display:'flex',alignItems:'center',gap:12,background:'var(--surface)',
+                    borderRadius:14,padding:'14px 16px',border:'1.5px solid rgba(var(--primary-rgb),.08)',
                     textDecoration:'none',boxShadow:'0 2px 10px rgba(0,0,0,.04)' }}
-                  onMouseEnter={e=>{e.currentTarget.style.borderColor=`${w.color}45`;e.currentTarget.style.boxShadow=`0 8px 24px ${w.color}15`}}
-                  onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(109,40,217,.08)';e.currentTarget.style.boxShadow='0 2px 10px rgba(0,0,0,.04)'}}>
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=`${mix(w.color,27)}`;e.currentTarget.style.boxShadow=`0 8px 24px ${mix(w.color,8)}`}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(var(--primary-rgb),.08)';e.currentTarget.style.boxShadow='0 2px 10px rgba(0,0,0,.04)'}}>
                   <span style={{ fontSize:20 }}>{w.icon}</span>
-                  <span style={{ flex:1,fontSize:13,fontWeight:700,color:'#1F2937' }}>{w.name}</span>
+                  <span style={{ flex:1,fontSize:13,fontWeight:700,color:'var(--text)' }}>{w.name}</span>
                   <Globe size={13} color={w.color}/>
                 </a>
               ))}
@@ -442,7 +449,7 @@ export default function AppsPage() {
 
         {/* ── CTA ── */}
         <div style={{ maxWidth:1100,margin:'0 auto',padding:'40px 20px 60px',position:'relative',zIndex:1 }}>
-          <div style={{ background:'linear-gradient(135deg,#6D28D9,#8B5CF6,#06B6D4)',
+          <div style={{ background:'var(--cta-grad)',
             borderRadius:24,padding:'48px 32px',textAlign:'center',alignItems:'center',justifyContent:'center' }}>
             <div style={{ fontSize:28,marginBottom:12,marginLeft:'45%' }}>
              <Mail size={40} color={'#f7fbfc'} />
@@ -455,7 +462,7 @@ export default function AppsPage() {
               I build native-feeling mobile apps with React Native. Let's discuss your idea.
             </p>
             <a href="#/Contact-me" style={{ display:'inline-flex',alignItems:'center',gap:8,
-              background:'#fff',color:'#6D28D9',padding:'13px 32px',borderRadius:99,
+              background:'#fff',color:'#4A1A5C',padding:'13px 32px',borderRadius:99,
               fontWeight:800,fontSize:15,textDecoration:'none' }}>
               Start a Conversation <ChevronRight size={16}/>
             </a>
