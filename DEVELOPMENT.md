@@ -112,8 +112,8 @@ npm run dev     # scripts may differ, check package.json
 - [x] Pick a direction: cream (for example `--bg: #F4EEE3`) or light grey (for example `--bg: #ECEAE7`).
 - [x] Change `--bg`, `--surface-2` and `--nav-bg` **together**, so the header and page still match. `--nav-bg` is the same colour as `--bg` at about 90% opacity.
 - [x] Make cards (`--surface`) one step lighter than the new page background, not pure `#FFFFFF`, or they will glare against it.
-- [ ] Re-check text contrast on the new background (`--muted` and `--faint` are the risky ones).
-- [ ] Confirm which gradient looked too white. If it is a soft fade behind the hero or the decorative polygons rather than the flat page colour, note where, and adjust it separately.
+- [x] Re-check text contrast on the new background (`--muted` and `--faint` are the risky ones).
+- [x] Confirm which gradient looked too white. If it is a soft fade behind the hero or the decorative polygons rather than the flat page colour, note where, and adjust it separately.
 
 ### 2. Mobile screen shifts / shakes sideways
 
