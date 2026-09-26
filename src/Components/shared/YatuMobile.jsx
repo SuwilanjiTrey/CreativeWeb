@@ -19,16 +19,28 @@ export function YatuLogo({ height = 70 }) {
 /* Slim "did you know?" pill – for under headings */
 export function YatuStrip() {
   return (
-    <a href={YATU_URL} target="_blank" rel="noopener noreferrer"
-      style={{ display:'inline-flex', alignItems:'center', gap:10, flexWrap:'wrap', marginTop:16,
-        padding:'7px 12px', borderRadius:99, textDecoration:'none',
+    <a href={YATU_URL} target="_blank" rel="noopener noreferrer" className="yatu-strip"
+      style={{ display:'flex', flexDirection:'column', gap:4, marginTop:16,
+        maxWidth:'100%', width:'fit-content', boxSizing:'border-box',
+        padding:'8px 14px', borderRadius:14, textDecoration:'none',
         background:'var(--complement-tint)', border:'1px solid rgba(var(--primary-rgb),.16)' }}>
-      <span style={{ fontSize:9, fontWeight:800, letterSpacing:'.08em', background:'#B45F2B',
-        color:'#fff', padding:'3px 8px', borderRadius:99 }}>NEW</span>
-      <span style={{ fontSize:12, fontWeight:600, color:'var(--text)' }}>
-        Also from CreativeWeb: <b style={{ color:'var(--primary)' }}>YatuMobile</b> payment gateway
+      <style>{`
+        .yatu-strip .yatu-strip-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .yatu-strip .yatu-strip-explore { align-self:flex-start; }
+        @media (min-width:640px) {
+          .yatu-strip { flex-direction:row !important; align-items:center; gap:10px !important; border-radius:99px !important; }
+          .yatu-strip .yatu-strip-explore { margin-left:2px; }
+        }
+      `}</style>
+      <span className="yatu-strip-row">
+        <span style={{ flex:'0 0 auto', fontSize:9, fontWeight:800, letterSpacing:'.08em', background:'#B45F2B',
+          color:'#fff', padding:'3px 8px', borderRadius:99 }}>NEW</span>
+        <span style={{ flex:'1 1 auto', minWidth:0, lineHeight:1.4, fontSize:12, fontWeight:600, color:'var(--text)' }}>
+          Also from CreativeWeb: <b style={{ color:'var(--primary)' }}>YatuMobile</b> payment gateway
+        </span>
       </span>
-      <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:12, fontWeight:700, color:'var(--primary)' }}>
+      <span className="yatu-strip-explore" style={{ flex:'0 0 auto', display:'inline-flex', alignItems:'center', gap:3,
+        fontSize:12, fontWeight:700, color:'var(--primary)' }}>
         Explore <ArrowUpRight size={12}/>
       </span>
     </a>

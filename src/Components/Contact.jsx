@@ -6,7 +6,7 @@ import ThemeTokens from './shared/ThemeTokens.jsx';
 
 const mix = (c, p) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
 
-const WHATSAPP_NUMBER = '+260571919051';
+const WHATSAPP_NUMBER = '+260971168716';
 
 /* ── SVG background ── */
 const BlobBg = () => (

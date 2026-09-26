@@ -163,12 +163,10 @@ export default function ServicesPage() {
           <a href="#/" style={{ fontSize:20,fontWeight:800,textDecoration:'none',
             backgroundImage:'var(--text-grad)',
             WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text' }}>
-            C.Web
+            CreativeWeb
           </a>
           <div style={{ display:'flex',gap:18,alignItems:'center' }}>
-            {[['Home','#/'],['Services','#/services'],['About','https://suwilanjitreychellah.vercel.app/']].map(([l,h])=>(
-              <a key={l} href={h} className="nav-link">{l}</a>
-            ))}
+           
             <ThemeToggle/>
             <a href="#/Contact-me" style={{ background:'var(--btn-grad)',color:'#fff',
               padding:'8px 20px',borderRadius:99,fontSize:12,fontWeight:700,textDecoration:'none' }}>
