@@ -4,7 +4,7 @@
 
 CreativeWeb is a portfolio and services website for a freelance web studio. It shows the work (websites, mobile apps, ERP systems, branding) and introduces **YatuMobile**, the studio's payment gateway for businesses and developers.
 
-**Live site:** https://creative-web.chellahtrey.workers.dev/#/
+**Live site:** https://creative-web.chellahtrey.workers.dev/
 
 ---
 
